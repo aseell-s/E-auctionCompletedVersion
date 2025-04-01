@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Brave",
+      "url": "http://localhost:3000", // Change this to your app's URL
+      "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe", // Adjust the path if necessary
+      "sourceMaps": true
+    }
+  ]
+}

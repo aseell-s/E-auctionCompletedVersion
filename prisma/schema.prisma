@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(BUYER)
+  isApproved Boolean  @default(false) // Used for seller approval
+  amount     Float    @default(0) // Funds that admin can add for buyers
+  points     Int      @default(0) // Token points earned from successful auctions
+  profile    Profile?
+  createdAt  DateTime @default(now())
+
+  auctions         Auction[]      @relation("SellerAuctions")
+  bids             Bid[]          @relation("UserBids")
+  Comment          Comment[]
+  watchlist        Watchlist[]
+  favorites        UserFavorite[]
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
+}
+
+model Profile {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id])
+  email            String?
+  phone            String?
+  companyRegNo     String?
+  city             String?
+  state            String?
+  pincode          String?
+  establishedAt    DateTime?
+  natureOfBusiness String?
+  panNo            String?
+  contactNo        String?
+  dob              DateTime?
+  address          String?
+  country          String?
+  company          String? // Only for sellers
+  taxId            String? // Only for sellers
+  createdAt        DateTime  @default(now())
+}
+
+model Auction {
+  id           String        @id @default(cuid())
+  title        String
+  description  String
+  startPrice   Float
+  currentPrice Float
+  itemType     String        @default("IRON")
+  images       String[] // Array of image URLs
+  seller       User          @relation("SellerAuctions", fields: [sellerId], references: [id])
+  sellerId     String
+  bids         Bid[]
+  status       AuctionStatus @default(PENDING)
+  isApproved   Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  endTime      DateTime
+  updatedAt    DateTime      @updatedAt
+
+  Comment       Comment[]
+  watchlistedBy Watchlist[]
+  favoritedBy   UserFavorite[]
+  messages      Message[]
+}
+
+model Bid {
+  id        String   @id @default(cuid())
+  amount    Float
+  bidder    User     @relation("UserBids", fields: [bidderId], references: [id])
+  bidderId  String
+  auction   Auction  @relation(fields: [auctionId], references: [id])
+  auctionId String
+  createdAt DateTime @default(now())
+
+  @@index([auctionId])
+  @@index([bidderId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  text      String
+  auctionId String
+  auction   Auction  @relation(fields: [auctionId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  auction   Auction  @relation(fields: [auctionId], references: [id])
+  auctionId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, auctionId])
+  @@index([userId])
+  @@index([auctionId])
+}
+
+// User Favorites relation table
+model UserFavorite {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  auction   Auction  @relation(fields: [auctionId], references: [id])
+  auctionId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, auctionId])
+  @@index([userId])
+  @@index([auctionId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  text        String
+  senderId    String
+  recipientId String
+  auctionId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sender    User    @relation(name: "SentMessages", fields: [senderId], references: [id])
+  recipient User    @relation(name: "ReceivedMessages", fields: [recipientId], references: [id])
+  auction   Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([auctionId])
+}
+
+enum Role {
+  BUYER
+  SELLER
+  SUPER_ADMIN
+}
+
+enum AuctionStatus {
+  ACTIVE
+  ENDED
+  PENDING
+  REJECTED
+}
