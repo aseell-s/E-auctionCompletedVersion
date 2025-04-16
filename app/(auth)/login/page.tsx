@@ -6,7 +6,7 @@ export const metadata = {
   description: 'Login Page',
 };
 
-export default async function LoginPage() {
+export default function LoginPage() {
   return (
     <Suspense fallback={null}>
       <Login />

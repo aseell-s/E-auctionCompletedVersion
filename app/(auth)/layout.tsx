@@ -15,8 +15,11 @@ export default function AuthLayout({
   useEffect(() => {
     if (status === 'authenticated') {
       router.push('/dashboard');
-    }
+    } 
+    console.log('status: ', status);
+    console.log('router: ', router);
   }, [status, router]);
+
 
   if (status === 'loading') {
     return (

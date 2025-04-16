@@ -12,6 +12,8 @@ export default withAuth(
       req.nextUrl.pathname.startsWith('/sellerRegister');
 
     if (isAuthPage) {
+      console.log('isAuthPage: ', isAuthPage);
+      console.log('isAuth: ', isAuth);
       if (isAuth) {
         return NextResponse.redirect(new URL('/dashboard', req.url));
       }

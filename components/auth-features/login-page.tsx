@@ -1,8 +1,7 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const router = useRouter();
@@ -20,6 +19,8 @@ export default function Login() {
     setLoading(true);
     setError('');
 
+    console.log('form: ', form);
+
     const result = await signIn('credentials', {
       redirect: false,
       email: form.email,
@@ -27,8 +28,19 @@ export default function Login() {
       role: form.userType,
     });
 
+    console.log('result: ', result);
+
     if (result?.error) {
-      setError(result.error);
+      // Check for the generic "CredentialsSignin" error and display a friendly message.
+      if (result.error === "CredentialsSignin") {
+        setError("Incorrect email or password.");
+      } else if (result.error.toLowerCase().includes("email")) {
+        setError("The email you entered is incorrect.");
+      } else if (result.error.toLowerCase().includes("password")) {
+        setError("The password you entered is incorrect.");
+      } else {
+        setError(result.error);
+      }
       setLoading(false);
       return;
     }
