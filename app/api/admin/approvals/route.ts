@@ -38,14 +38,6 @@ export async function GET() {
               amount: "desc",
             },
           },
-          Comment: {
-            include: {
-              user: true,
-            },
-            orderBy: {
-              createdAt: "desc",
-            },
-          },
         },
       });
     } catch (error) {

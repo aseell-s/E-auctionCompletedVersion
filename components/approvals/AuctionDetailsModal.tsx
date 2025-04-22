@@ -29,7 +29,7 @@ export function AuctionDetailsModal({
 }: AuctionDetailsModalProps) {
   useEffect(() => {
     if (isOpen && auction) {
-      console.log('AuctionDetailsModal - Received auction data:', {
+      console.log("AuctionDetailsModal - Received auction data:", {
         id: auction.id,
         title: auction.title,
         description: auction.description,
@@ -39,19 +39,18 @@ export function AuctionDetailsModal({
         seller: auction.seller,
         images: auction.images,
         bids: auction.bids,
-        comments: auction.Comment
       });
     }
   }, [isOpen, auction]);
 
   const handleApprove = () => {
-    console.log('AuctionDetailsModal - Approving auction:', auction.id);
+    console.log("AuctionDetailsModal - Approving auction:", auction.id);
     onApprove(auction.id);
     onClose();
   };
 
   const handleReject = () => {
-    console.log('AuctionDetailsModal - Rejecting auction:', auction.id);
+    console.log("AuctionDetailsModal - Rejecting auction:", auction.id);
     onReject(auction.id);
     onClose();
   };
@@ -163,28 +162,6 @@ export function AuctionDetailsModal({
                     <span className="text-sm text-gray-500">
                       {formatDate(bid.createdAt)}
                     </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {auction.Comment && auction.Comment.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-2">Comments</h3>
-              <div className="space-y-2">
-                {auction.Comment.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="p-2 bg-gray-50 rounded"
-                  >
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{comment.user.name}</span>
-                      <span className="text-sm text-gray-500">
-                        {formatDate(comment.createdAt)}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-gray-700">{comment.text}</p>
                   </div>
                 ))}
               </div>

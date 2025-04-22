@@ -37,7 +37,6 @@ export function Navbar({ user }: NavbarProps) {
     ],
     [Role.BUYER]: [
       // { label: 'My Auctions', href: '/auctions' },
-      // { label: "Watchlist", href: "/watchlist" },
     ],
   };
 

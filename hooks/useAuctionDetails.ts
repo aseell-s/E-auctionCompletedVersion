@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface AuctionDetails {
   id: string;
@@ -32,15 +32,6 @@ interface AuctionDetails {
       name: string;
     };
   }>;
-  Comment: Array<{
-    id: string;
-    text: string;
-    createdAt: string;
-    user: {
-      id: string;
-      name: string;
-    };
-  }>;
 }
 
 export function useAuctionDetails(auctionId: string | null) {
@@ -58,16 +49,16 @@ export function useAuctionDetails(auctionId: string | null) {
       try {
         setLoading(true);
         setError(null);
-        
+
         const response = await fetch(`/api/auctions/${auctionId}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch auction details');
+          throw new Error("Failed to fetch auction details");
         }
-        
+
         const auctionData = await response.json();
         setData(auctionData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }

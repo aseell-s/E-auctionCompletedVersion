@@ -39,16 +39,6 @@ export interface Bid {
   };
 }
 
-export interface Comment {
-  id: string;
-  text: string;
-  createdAt: Date;
-  user: {
-    id: string;
-    name: string;
-  };
-}
-
 export interface Auction {
   id: string;
   title: string;
@@ -69,7 +59,6 @@ export interface Auction {
     profile?: Profile;
   };
   bids?: Bid[];
-  comments?: Comment[];
 }
 
 export interface ApprovalsData {
