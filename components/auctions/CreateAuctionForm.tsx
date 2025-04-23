@@ -52,7 +52,7 @@ const formSchema = z.object({
     const date = new Date(val);
     return date > new Date();
   }, "End time must be in the future"),
-  itemType: z.enum(["IRON", "METAL", "ALUMINIUM"], {
+  itemType: z.enum(["IRON", "METAL", "ALUMINIUM","PLASTIC","OTHER'S"], {
     required_error: "Please select an item type",
   }),
   // Replace file validation with string URLs that we'll get from UploadThing
@@ -60,7 +60,7 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema> & {
-  itemType: "IRON" | "METAL" | "ALUMINIUM";
+  itemType: "IRON" | "METAL" | "ALUMINIUM" | "PLASTIC" | "OTHER'S";
 };
 
 export function CreateAuctionForm() {
@@ -217,6 +217,8 @@ export function CreateAuctionForm() {
                       <SelectItem value="IRON">Iron</SelectItem>
                       <SelectItem value="METAL">Metal</SelectItem>
                       <SelectItem value="ALUMINIUM">Aluminium</SelectItem>
+                      <SelectItem value="PLASTIC">Plastic</SelectItem>
+                      <SelectItem value="OTHER'S">Other's</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

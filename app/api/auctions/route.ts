@@ -105,7 +105,9 @@ export async function POST(req: Request) {
     }
 
     // Validate itemType enum
-    const validItemTypes = ["IRON", "METAL", "ALUMINIUM"];
+// ...existing code...
+const validItemTypes = ["IRON", "METAL", "ALUMINIUM", "PLASTIC", "OTHER'S"];
+// ...existing code...
     if (!validItemTypes.includes(itemType)) {
       console.error("[Auction Creation] Invalid itemType:", itemType);
       return NextResponse.json(

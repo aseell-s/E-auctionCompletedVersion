@@ -28,7 +28,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 
-// Password change schema
 const passwordSchema = z
   .object({
     currentPassword: z
@@ -36,7 +35,15 @@ const passwordSchema = z
       .min(1, { message: "Current password is required" }),
     newPassword: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
+      .min(8, { message: "Password must be at least 8 characters" })
+      // lookahead for at least one digit and one special character
+      .regex(
+        /^(?=.*[0-9])(?=.*[!@#$%^&*()_\-+=\[{\]};:'",<.>/?\\|`~]).*$/,
+        {
+          message:
+            "Password must include at least one number and one special character",
+        }
+      ),
     confirmPassword: z
       .string()
       .min(8, { message: "Confirm password is required" }),
@@ -45,6 +52,7 @@ const passwordSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
+
 
 interface UserProfile {
   id: string;
