@@ -20,13 +20,11 @@ export interface Profile {
   pincode?: string;
   establishedAt?: Date;
   natureOfBusiness?: string;
-  panNo?: string;
   contactNo?: string;
   dob?: Date;
   address?: string;
   country?: string;
   company?: string;
-  taxId?: string;
 }
 
 export interface Bid {

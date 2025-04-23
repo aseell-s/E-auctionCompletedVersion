@@ -38,13 +38,11 @@ model Profile {
   pincode          String?
   establishedAt    DateTime?
   natureOfBusiness String?
-  panNo            String?
   contactNo        String?
   dob              DateTime?
   address          String?
   country          String?
   company          String? // Only for sellers
-  taxId            String? // Only for sellers
   createdAt        DateTime  @default(now())
 }
 
