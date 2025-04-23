@@ -47,21 +47,22 @@ model Profile {
 }
 
 model Auction {
-  id           String        @id @default(cuid())
-  title        String
-  description  String
-  startPrice   Float
-  currentPrice Float
-  itemType     String        @default("IRON")
-  images       String[] // Array of image URLs
-  seller       User          @relation("SellerAuctions", fields: [sellerId], references: [id])
-  sellerId     String
-  bids         Bid[]
-  status       AuctionStatus @default(PENDING)
-  isApproved   Boolean       @default(false)
-  createdAt    DateTime      @default(now())
-  endTime      DateTime
-  updatedAt    DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  startPrice    Float
+  currentPrice  Float
+  itemType      String        @default("IRON")
+  images        String[] // Array of image URLs
+  seller        User          @relation("SellerAuctions", fields: [sellerId], references: [id])
+  sellerId      String
+  bids          Bid[]
+  status        AuctionStatus @default(PENDING)
+  isApproved    Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  endTime       DateTime
+  updatedAt     DateTime      @updatedAt
+  pointsAwarded Boolean       @default(false) // Track if points have been awarded
 
   favoritedBy UserFavorite[]
   messages    Message[]

@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
           email: credentials?.email,
           passwordProvided: !!credentials?.password,
         });
-        
+
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Please enter both email and password.");
         }
@@ -27,7 +27,10 @@ export const authOptions: NextAuthOptions = {
         console.log("Normalized email:", normalizedEmail);
 
         // Log the plain-text password for debugging
-        console.log("User provided password (plain-text):", credentials.password);
+        console.log(
+          "User provided password (plain-text):",
+          credentials.password
+        );
 
         // Find user in the database by normalized email
         const user = await prisma.user.findUnique({
@@ -36,7 +39,7 @@ export const authOptions: NextAuthOptions = {
         console.log("User found from DB:", JSON.stringify(user, null, 2));
 
         if (!user) {
-          throw new Error("Incorrect email or password.");
+          throw new Error("No User found for this email.");
         }
 
         // Log the stored hashed password
@@ -50,12 +53,14 @@ export const authOptions: NextAuthOptions = {
         console.log("Passwords match:", passwordsMatch);
 
         if (!passwordsMatch) {
-          throw new Error("Incorrect email or password.");
+          throw new Error("Incorrect password.");
         }
 
         // For sellers, check if approved
         if (user.role === "SELLER" && !user.isApproved) {
-          throw new Error("Your account is pending approval. Please wait for admin approval.");
+          throw new Error(
+            "Your account is pending approval. Please wait for admin approval."
+          );
         }
 
         console.log("Authorization successful for user:", {

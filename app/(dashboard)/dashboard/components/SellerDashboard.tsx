@@ -95,13 +95,18 @@ export function SellerDashboard() {
 
           // Only show notifications for auctions we haven't shown yet
           recentlyEnded.forEach(
-            (auction: { id: string; pointsAwarded: number; title: string }) => {
+            (auction: {
+              id: string;
+              title: string;
+              sellerPoints: number;
+              pointsAwardedValue: boolean;
+            }) => {
               if (
-                auction.pointsAwarded > 0 &&
+                auction.pointsAwardedValue &&
+                auction.sellerPoints > 0 &&
                 !shownNotifications.has(auction.id)
               ) {
-                showPointsEarnedToast(auction.title, auction.pointsAwarded);
-                // Track that we've shown this notification
+                showPointsEarnedToast(auction.title, auction.sellerPoints);
                 setShownNotifications((prev) => new Set(prev).add(auction.id));
               }
             }
@@ -177,9 +182,12 @@ export function SellerDashboard() {
   const renderPointsEarnedHeader = () => {
     if (recentlyEndedAuctions.length === 0) return null;
 
-    // Calculate total points from recently ended auctions
+    // Sum sellerPoints from recently ended auctions
     const totalRecentPoints = recentlyEndedAuctions.reduce(
-      (sum, auction) => sum + (auction.pointsAwarded || 0),
+      (sum, auction) =>
+        auction.pointsAwarded && auction.sellerPoints > 0
+          ? sum + auction.sellerPoints
+          : sum,
       0
     );
 

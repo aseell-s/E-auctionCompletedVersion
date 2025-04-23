@@ -35,13 +35,41 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Calculate points for each auction
+    // Award points if not already awarded
+    for (const auction of recentlyEndedAuctions) {
+      if (!auction.pointsAwarded && auction._count.bids > 0) {
+        const points = calculatePoints(
+          auction.currentPrice,
+          auction._count.bids
+        );
+        await prisma.$transaction([
+          prisma.user.update({
+            where: { id: auction.sellerId },
+            data: { points: { increment: points } },
+          }),
+          prisma.auction.update({
+            where: { id: auction.id },
+            data: { pointsAwarded: true },
+          }),
+        ]);
+        auction.pointsAwarded = true;
+      }
+    }
+
+    // Fetch seller's current points from DB
+    const seller = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { points: true },
+    });
+
+    // Calculate points for each auction (for response)
     const auctionsWithPoints = recentlyEndedAuctions.map((auction) => ({
       ...auction,
-      pointsAwarded:
+      pointsAwardedValue:
         auction._count.bids > 0
           ? calculatePoints(auction.currentPrice, auction._count.bids)
           : 0,
+      sellerPoints: seller?.points ?? 0, // Always use DB value for consistency
     }));
 
     return NextResponse.json(auctionsWithPoints);
