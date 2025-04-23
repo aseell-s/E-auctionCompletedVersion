@@ -437,26 +437,31 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               )}
 
               {/* Conditional Content for Contact */}
-              <div className="p-6 mt-8 border-t-2 border-gray-300">
-                <h3 className="text-2xl text-indigo-500 font-bold mb-2">
-                  {user.role === Role.BUYER
-                    ? "Contact to add Funds here"
-                    : "Contact to Redeem Points here"}
-                </h3>
-                <p className="text-sm mb-4">
-                  For{" "}
-                  {user.role === Role.BUYER
-                    ? "adding funds"
-                    : "redeeming points"}{" "}
-                  to your account, reach out to:
-                </p>
-                <a
-                  href="mailto:admin@example.com"
-                  className="text-blue-600 hover:underline"
-                >
-                  admin@example.com
-                </a>
-              </div>
+
+              {user.role != Role.SUPER_ADMIN && (
+                <>
+                  <div className="p-6 mt-8 border-t-2 border-gray-300">
+                    <h3 className="text-2xl text-indigo-500 font-bold mb-2">
+                      {user.role === Role.BUYER
+                        ? "Contact to add Funds here"
+                        : "Contact to Redeem Points here"}
+                    </h3>
+                    <p className="text-sm mb-4">
+                      For{" "}
+                      {user.role === Role.BUYER
+                        ? "adding funds"
+                        : "redeeming points"}{" "}
+                      to your account, reach out to:
+                    </p>
+                    <a
+                      href="mailto:admin@example.com"
+                      className="text-blue-600 hover:underline"
+                    >
+                      admin@example.com
+                    </a>
+                  </div>
+                </>
+              )}
             </Tabs>
           </Card>
         </div>

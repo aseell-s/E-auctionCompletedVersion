@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import AddFundsForm from "@/components/admin/AddFundsForm";
 import RedeemPointsForm from "@/components/admin/RedeemPointsForm";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "../ui/button";
 
@@ -85,104 +84,84 @@ export default function UserProfileClient({ user }: UserProfileClientProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           <div className="bg-white shadow rounded-lg border border-gray-200">
-            <Tabs defaultValue="details" className="w-full">
-              <div className="px-6 pt-6 border-b border-gray-200">
-                <TabsList className="mb-0">
-                  <TabsTrigger value="details">User Details</TabsTrigger>
-                  <TabsTrigger value="activity">Activity</TabsTrigger>
-                </TabsList>
-              </div>
+            <div className="px-6 pt-6 border-b border-gray-200">
+              <h2 className="text-lg font-semibold">User Details</h2>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <p className="text-sm font-medium text-gray-500 mb-1">
+                    Email
+                  </p>
+                  <p className="text-gray-900">{user.email}</p>
+                </div>
 
-              <div className="p-6">
-                <TabsContent value="details" className="mt-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="bg-gray-50 p-4 rounded-md">
-                      <p className="text-sm font-medium text-gray-500 mb-1">
-                        Email
-                      </p>
-                      <p className="text-gray-900">{user.email}</p>
-                    </div>
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <p className="text-sm font-medium text-gray-500 mb-1">
+                    Account Status
+                  </p>
+                  <div className="flex items-center">
+                    <span
+                      className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                        user.isApproved ? "bg-green-500" : "bg-yellow-500"
+                      }`}
+                    ></span>
+                    <span>
+                      {user.isApproved ? "Approved" : "Pending Approval"}
+                    </span>
+                  </div>
+                </div>
 
-                    <div className="bg-gray-50 p-4 rounded-md">
-                      <p className="text-sm font-medium text-gray-500 mb-1">
-                        Account Status
-                      </p>
-                      <div className="flex items-center">
-                        <span
-                          className={`inline-block w-2 h-2 rounded-full mr-2 ${
-                            user.isApproved ? "bg-green-500" : "bg-yellow-500"
-                          }`}
-                        ></span>
-                        <span>
-                          {user.isApproved ? "Approved" : "Pending Approval"}
-                        </span>
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <p className="text-sm font-medium text-gray-500 mb-1">
+                    Balance
+                  </p>
+                  <p className="text-xl font-semibold text-gray-900">
+                    ${currentBalance.toFixed(2)}
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <p className="text-sm font-medium text-gray-500 mb-1">
+                    Points
+                  </p>
+                  <p className="text-xl font-semibold text-gray-900">
+                    {points}
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <p className="text-sm font-medium text-gray-500 mb-1">
+                    Created
+                  </p>
+                  <p className="text-gray-900">
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+
+                {user.profile && (
+                  <>
+                    {user.profile.phone && (
+                      <div className="bg-gray-50 p-4 rounded-md">
+                        <p className="text-sm font-medium text-gray-500 mb-1">
+                          Phone
+                        </p>
+                        <p className="text-gray-900">{user.profile.phone}</p>
                       </div>
-                    </div>
-
-                    <div className="bg-gray-50 p-4 rounded-md">
-                      <p className="text-sm font-medium text-gray-500 mb-1">
-                        Balance
-                      </p>
-                      <p className="text-xl font-semibold text-gray-900">
-                        ${currentBalance.toFixed(2)}
-                      </p>
-                    </div>
-
-                    <div className="bg-gray-50 p-4 rounded-md">
-                      <p className="text-sm font-medium text-gray-500 mb-1">
-                        Points
-                      </p>
-                      <p className="text-xl font-semibold text-gray-900">
-                        {points}
-                      </p>
-                    </div>
-
-                    <div className="bg-gray-50 p-4 rounded-md">
-                      <p className="text-sm font-medium text-gray-500 mb-1">
-                        Created
-                      </p>
-                      <p className="text-gray-900">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-
-                    {user.profile && (
-                      <>
-                        {user.profile.phone && (
-                          <div className="bg-gray-50 p-4 rounded-md">
-                            <p className="text-sm font-medium text-gray-500 mb-1">
-                              Phone
-                            </p>
-                            <p className="text-gray-900">
-                              {user.profile.phone}
-                            </p>
-                          </div>
-                        )}
-
-                        {user.profile.address && (
-                          <div className="bg-gray-50 p-4 rounded-md col-span-2">
-                            <p className="text-sm font-medium text-gray-500 mb-1">
-                              Address
-                            </p>
-                            <p className="text-gray-900">
-                              {user.profile.address}
-                            </p>
-                          </div>
-                        )}
-                      </>
                     )}
-                  </div>
-                </TabsContent>
 
-                <TabsContent value="activity" className="mt-0">
-                  <div className="bg-gray-50 p-4 rounded-md text-center">
-                    <p className="text-gray-500">
-                      User activity logs will be displayed here.
-                    </p>
-                  </div>
-                </TabsContent>
+                    {user.profile.address && (
+                      <div className="bg-gray-50 p-4 rounded-md col-span-2">
+                        <p className="text-sm font-medium text-gray-500 mb-1">
+                          Address
+                        </p>
+                        <p className="text-gray-900">{user.profile.address}</p>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-            </Tabs>
+            </div>
           </div>
         </div>
         {user.role === "BUYER" ? (
