@@ -117,7 +117,7 @@ export default function Register() {
         <div className='flex felx-col gap-2 items-center justify-center mt-4 text-center'>
           <p className='text-gray-600'>Are you a seller?</p>
           <Link
-            href='/sellerRegister'
+             href='/sellerRegister'
             className='text-indigo-600 hover:text-indigo-700 font-medium'
           >
             Register as Seller
