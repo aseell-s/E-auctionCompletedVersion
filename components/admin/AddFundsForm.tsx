@@ -103,7 +103,7 @@ export default function AddFundsForm({
                 success ? "text-green-600" : "text-gray-900"
               }`}
             >
-              ر.س{displayedBalance.toFixed(2)}
+              ﷼{displayedBalance.toFixed(2)}
             </span>
             {success && (
               <Check size={16} className="text-green-500 ml-2 animate-pulse" />
@@ -122,7 +122,7 @@ export default function AddFundsForm({
           </label>
           <div className="relative rounded-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span className="text-gray-500 sm:text-sm">ر.س</span>
+              <span className="text-gray-500 sm:text-sm">﷼</span>
             </div>
             <input
               type="number"

@@ -301,8 +301,8 @@ export function SellerDashboard() {
         {/* Price range */}
         <div className="mt-3 px-1">
           <div className="flex justify-between text-sm text-muted-foreground mb-1.5">
-            <span>Price: ر.س{priceRange[0].toLocaleString()}</span>
-            <span>ر.س{priceRange[1].toLocaleString()}</span>
+            <span>Price: ﷼{priceRange[0].toLocaleString()}</span>
+            <span>﷼{priceRange[1].toLocaleString()}</span>
           </div>
           <Slider
             defaultValue={[0, maxPrice]}
@@ -316,8 +316,8 @@ export function SellerDashboard() {
             className="mt-2 w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>ر.س0</span>
-            <span>ر.س{maxPrice.toLocaleString()}</span>
+            <span>﷼0</span>
+            <span>﷼{maxPrice.toLocaleString()}</span>
           </div>
         </div>
       </Card>

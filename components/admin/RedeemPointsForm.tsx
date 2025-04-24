@@ -80,7 +80,7 @@ export default function RedeemPointsForm({
       // Toast notification
       toast({
         title: "Points redeemed successfully",
-        description: `Converted ${points} points to ر.س${amountAdded.toFixed(2)}`,
+        description: `Converted ${points} points to ﷼${amountAdded.toFixed(2)}`,
         variant: "default", // Ensure correct variant
       });
 
@@ -137,7 +137,7 @@ export default function RedeemPointsForm({
                 success ? "text-green-600" : "text-gray-900"
               }`}
             >
-              ر.س{displayedBalance.toFixed(2)}
+              ﷼{displayedBalance.toFixed(2)}
             </span>
             {success && (
               <Check size={16} className="text-green-500 ml-2 animate-pulse" />
@@ -173,11 +173,11 @@ export default function RedeemPointsForm({
             <div className="flex items-center justify-between text-sm">
               <span>Conversion value:</span>
               <span className="font-medium text-green-600">
-                ر.س{pointsValue.toFixed(2)}
+                ﷼{pointsValue.toFixed(2)}
               </span>
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              Conversion rate: 10 points = ر.س1
+              Conversion rate: 10 points = ﷼1
             </div>
           </div>
         )}

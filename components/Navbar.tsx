@@ -77,7 +77,7 @@ export function Navbar({ user }: NavbarProps) {
         {user.role === Role.BUYER && typeof user.amount === "number" && (
           <div className="flex items-center bg-indigo-100 px-4 py-2 rounded-full shadow-sm border border-indigo-200 mr-4">
             {/* Replace FiDollarSign with SAR symbol */}
-            <span className="text-indigo-600 mr-2 text-xl font-bold">ر.س</span>
+            <span className="text-indigo-600 mr-2 text-xl font-bold">﷼</span>
             <span className="font-semibold text-indigo-800">
               {user.amount.toFixed(2)}
             </span>
@@ -125,7 +125,7 @@ export function Navbar({ user }: NavbarProps) {
           <div className="px-6 pt-4 pb-2">
             <div className="flex items-center bg-indigo-100 px-4 py-3 rounded-lg">
               {/* Replace FiDollarSign with SAR symbol */}
-              <span className="text-indigo-600 mr-2 text-xl font-bold">ر.س</span>
+              <span className="text-indigo-600 mr-2 text-xl font-bold">﷼</span>
               <div>
                 <p className="text-xs text-indigo-600">Your Balance</p>
                 <p className="font-semibold text-indigo-800">

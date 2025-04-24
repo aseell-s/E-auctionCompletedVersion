@@ -94,7 +94,7 @@ export function AuctionCard({ auction }: AuctionCardProps) {
       <CardContent>
         <div className="space-y-2">
           <p>
-            <span className="font-medium">Current Price:</span> ر.س
+            <span className="font-medium">Current Price:</span> ﷼
             {auction.currentPrice}
           </p>
           <p>
