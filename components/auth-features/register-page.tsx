@@ -1,3 +1,17 @@
+// 1. Provides a registration form for users to create an account.
+// 2. Collects user details, including:
+//    - Name
+//    - Email
+//    - Password
+//    - Role (default is "BUYER").
+// 3. Handles form input changes and updates the state dynamically.
+// 4. Sends a POST request to the `/api/auth/register` endpoint to register the user.
+// 5. Displays success messages upon successful registration and redirects the user to the `/login` page.
+// 6. Handles errors during registration and displays error messages to the user.
+// 7. Uses `useAuthStore` to update the global state with the registered user's information.
+// 8. Includes a "Register as Seller" link to navigate users to the seller registration page.
+// 9. Uses Tailwind CSS for responsive and visually appealing styling.
+// 10. Displays a loading state while the registration request is being processed.
 'use client';
 
 import { useEffect, useState } from 'react';

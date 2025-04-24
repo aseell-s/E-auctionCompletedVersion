@@ -1,3 +1,16 @@
+// 1. Provides a login form for users to authenticate themselves.
+// 2. Collects user credentials, including:
+//    - Email
+//    - Password
+//    - User type (Seller, Buyer, or Admin).
+// 3. Validates user input and sends a login request using `next-auth`'s `signIn` function.
+// 4. Displays error messages if authentication fails.
+// 5. Redirects authenticated users to the `/dashboard` page upon successful login.
+// 6. Allows users to toggle password visibility using a "show/hide password" feature.
+// 7. Includes a "Sign Up" button to navigate users to the registration page.
+// 8. Uses Tailwind CSS for responsive and visually appealing styling.
+// 9. Displays a loading state while the login request is being processed.
+
 'use client';
 
 import { useState } from 'react';

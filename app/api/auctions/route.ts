@@ -1,3 +1,7 @@
+// - GET API to fetch auctions using filters like status, sellerId, and approvalStatus.
+// - Only logged-in users can access it.
+// - Uses Prisma to get auctions and seller info from the database.
+// - Returns auction list with related details.
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";

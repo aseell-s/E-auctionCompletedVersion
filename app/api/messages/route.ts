@@ -1,3 +1,7 @@
+// - POST API to send messages between users in an auction.
+// - Only logged-in users can send messages.
+// - Validates message text, recipientId, and auctionId.
+// - Uses Prisma to save the message and returns it in the response.
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";

@@ -1,3 +1,7 @@
+// - GET API to get auctions that ended in the last 24 hours.
+// - Only for logged-in sellers.
+// - Calculates points from final price and number of bids.
+// - Sends back data in a structured JSON format.
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";

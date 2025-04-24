@@ -1,3 +1,24 @@
+// 1. Imports necessary dependencies, including React hooks, UI components, and forms for adding funds and redeeming points.
+// 2. Defines the User interface to represent user data, including:
+//    - id, name, email, role, approval status, balance, points, and profile details (phone, address, etc.).
+// 3. Accepts a user object as a prop through the UserProfileClientProps interface.
+// 4. Manages state for:
+//    - currentBalance: Tracks the user's current monetary balance.
+//    - points: Tracks the user's current points.
+// 5. Displays a debug toast notification when the component mounts (for testing purposes).
+// 6. Provides handlers for:
+//    - handleSuccessfulFundsAdd: Updates the balance and shows a success toast when funds are added.
+//    - handleSuccessfulPointsRedeem: Updates points and balance, and shows a success toast when points are redeemed.
+// 7. Renders the user profile UI:
+//    - Displays the user's name, role, email, account status, balance, points, and creation date.
+//    - Shows additional profile details (phone and address) if available.
+// 8. Uses tabs to organize content:
+//    - "User Details" tab: Displays user information.
+//    - "Activity" tab: Placeholder for user activity logs.
+// 9. Conditionally renders forms based on the user's role:
+//    - If the user is a "BUYER", displays the AddFundsForm to add funds.
+//    - If the user is a "SELLER", displays the RedeemPointsForm to redeem points.
+// 10. Uses Tailwind CSS for styling the layout and components.
 "use client";
 
 import { useEffect, useState } from "react";

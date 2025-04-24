@@ -1,3 +1,11 @@
+/*
+Checks if the user is logged in.
+Allows only SUPER_ADMIN users to access the data
+Reads filters and search terms from the URL
+Gets ready to filter/search seller data, though actual data fetching isn’t shown.
+Handles errors if the user isn’t logged in or allowed
+
+*/
 import { NextResponse, Request } from "next/server";
 import { PrismaClient, Role } from "@prisma/client";
 import { getServerSession } from "next-auth";

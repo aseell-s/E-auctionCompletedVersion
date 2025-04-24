@@ -1,3 +1,7 @@
+// - POST API for business registration.
+// - Collects company info, contact details, and tax data.
+// - Validates input and checks if the email is already used.
+// - Prepares and saves business info using Prisma.
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";

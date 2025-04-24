@@ -1,3 +1,7 @@
+// - POST API to place a bid on an auction.
+// - Checks user balance, auction status, and bid amount.
+// - Uses Prisma to update auction price, create bid, and adjust balances.
+// - Ensures secure and valid bidding with proper validations.
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";

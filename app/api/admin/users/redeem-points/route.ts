@@ -1,3 +1,9 @@
+/*
+Lets users turn points into money, which is added to their account.
+Allows only SUPER_ADMIN or SELLER users to do this.
+Checks if the user ID and points are valid before converting.
+Supports the platform’s points system by handling point redemption.
+*/
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";

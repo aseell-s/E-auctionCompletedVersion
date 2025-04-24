@@ -1,3 +1,9 @@
+/*
+1. Gets sellers who are waiting to be approved.
+2. Gets auctions that are still pending and not approved yet.
+3. Sends the information to the admin so they can review it.
+4. If something goes wrong, it handles the error nicely without breaking the app
+*/
 import { AuctionStatus, PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 

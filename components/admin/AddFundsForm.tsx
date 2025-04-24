@@ -1,3 +1,25 @@
+// 1. Imports React hooks, a toast notification system, and icons for UI feedback.
+// 2. Defines props for the component:
+//    - userId: User's ID.
+//    - userName: User's name.
+//    - currentBalance: User's current balance (default is 0).
+//    - onSuccess: Callback for successful fund addition.
+// 3. Manages state for:
+//    - amount: Amount to add.
+//    - loading: Tracks if the form is processing.
+//    - success: Tracks if funds were added successfully.
+//    - displayedBalance: Updates the user's balance in the UI.
+// 4. handleAddFunds function:
+//    - Validates the amount input.
+//    - Sends a POST request to add funds.
+//    - Updates the balance and shows success or error notifications.
+//    - Resets the input field and calls the onSuccess callback if provided.
+// 5. Renders the form:
+//    - Displays the user's name and current balance.
+//    - Input field for the amount to add.
+//    - Submit button with loading and validation states.
+//    - Success indicator and toast notifications.
+// 6. Uses Tailwind CSS for styling.
 "use client";
 
 import { useState } from "react";
