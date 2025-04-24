@@ -5,7 +5,7 @@ import { Role } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  FiDollarSign,
+  // FiDollarSign, // Removed
   FiAward,
   FiUser,
   FiMail,
@@ -52,7 +52,6 @@ const passwordSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
-
 
 interface UserProfile {
   id: string;
@@ -240,11 +239,12 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               {user.role === Role.BUYER && (
                 <div className="w-full mt-6 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white shadow-lg">
                   <div className="flex items-center mb-2">
-                    <FiDollarSign className="mr-2" size={20} />
+                    {/* Replace FiDollarSign with SAR symbol */}
+                    <span className="mr-2 text-xl font-bold">ر.س</span>
                     <h3 className="text-lg font-medium">Your Balance</h3>
                   </div>
                   <p className="text-3xl font-bold">
-                    ${user.amount.toFixed(2)}
+                    ر.س{user.amount.toFixed(2)}
                   </p>
                 </div>
               )}
@@ -261,11 +261,12 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
                   <div className="w-full mt-4 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white shadow-lg">
                     <div className="flex items-center mb-2">
-                      <FiDollarSign className="mr-2" size={20} />
+                      {/* Replace FiDollarSign with SAR symbol */}
+                      <span className="mr-2 text-xl font-bold">ر.س</span>
                       <h3 className="text-lg font-medium">Your Balance</h3>
                     </div>
                     <p className="text-3xl font-bold">
-                      ${user.amount.toFixed(2)}
+                      ر.س{user.amount.toFixed(2)}
                     </p>
                   </div>
                 </>

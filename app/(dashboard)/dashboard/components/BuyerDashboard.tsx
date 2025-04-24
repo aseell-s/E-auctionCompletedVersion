@@ -263,8 +263,8 @@ export function BuyerDashboard() {
         {/* Price range */}
         <div className="mt-3 px-1">
           <div className="flex justify-between text-sm text-muted-foreground mb-1.5">
-            <span>Price: ${priceRange[0]}</span>
-            <span>${priceRange[1]}</span>
+            <span>Price: ر.س{priceRange[0]}</span>
+            <span>ر.س{priceRange[1]}</span>
           </div>
           <Slider
             defaultValue={[0, maxPrice]}

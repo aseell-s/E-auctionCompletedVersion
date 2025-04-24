@@ -73,11 +73,11 @@ export function AuctionDetailsModal({
               <h3 className="font-semibold">Auction Information</h3>
               <div className="mt-2 space-y-2">
                 <p>
-                  <span className="text-gray-600">Start Price:</span> $
+                  <span className="text-gray-600">Start Price:</span> ر.س
                   {auction.startPrice.toFixed(2)}
                 </p>
                 <p>
-                  <span className="text-gray-600">Current Price:</span> $
+                  <span className="text-gray-600">Current Price:</span> ر.س
                   {auction.currentPrice.toFixed(2)}
                 </p>
                 <p>
@@ -157,7 +157,7 @@ export function AuctionDetailsModal({
                     className="flex justify-between items-center p-2 bg-gray-50 rounded"
                   >
                     <span>
-                      {bid.bidder.name} bid ${bid.amount.toFixed(2)}
+                      {bid.bidder.name} bid ر.س{bid.amount.toFixed(2)}
                     </span>
                     <span className="text-sm text-gray-500">
                       {formatDate(bid.createdAt)}
