@@ -7,6 +7,7 @@ import { SellerDetailsModal } from "@/components/approvals/SellerDetailsModal";
 import { AuctionDetailsModal } from "@/components/approvals/AuctionDetailsModal";
 import { useState, useEffect } from "react";
 import { User, Auction } from "@/types";
+import { toast } from "sonner";
 
 interface ApprovalsData {
   pendingSellers: User[];
@@ -55,11 +56,17 @@ export default function ApprovalsPage() {
   const handleApprove = (type: "seller" | "auction", id: string) => {
     console.log(`Approving ${type} with ID:`, id);
     handleApproval(type, id, true);
+    toast.success(
+      type === "seller"
+        ? "Seller approved successfully!"
+        : "Auction approved successfully!"
+    );
   };
 
   const handleReject = (type: "seller" | "auction", id: string) => {
     console.log(`Rejecting ${type} with ID:`, id);
     handleApproval(type, id, false);
+    toast.error(type === "seller" ? "Seller rejected." : "Auction rejected.");
   };
 
   return (

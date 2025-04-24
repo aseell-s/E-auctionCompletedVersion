@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 export default function Login() {
   const router = useRouter();
@@ -34,13 +35,16 @@ export default function Login() {
       // Check for the generic "CredentialsSignin" error and display a friendly message.
       if (result.error === "CredentialsSignin") {
         setError("Incorrect email or password.");
+        toast.error("Incorrect email or password.");
       } else {
         setError(result.error);
+        toast.error(result.error);
       }
       setLoading(false);
       return;
     }
 
+    toast.success("Login successful!");
     router.push("/dashboard");
   };
 

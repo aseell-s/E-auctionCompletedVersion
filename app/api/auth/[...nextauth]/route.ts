@@ -10,6 +10,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        role: { label: "Role", type: "text" },
       },
       async authorize(credentials) {
         // Log received credentials (for debugging only)
@@ -40,6 +41,11 @@ export const authOptions: NextAuthOptions = {
 
         if (!user) {
           throw new Error("No User found for this email.");
+        }
+
+        // Check user role matches the selected role
+        if (credentials?.role && user.role !== credentials.role) {
+          throw new Error("User role mismatch.");
         }
 
         // Log the stored hashed password

@@ -38,26 +38,18 @@ export function DashboardClient({ user }: DashboardClientProps) {
 
       if (response.ok) {
         if (result.processed === 0) {
-          toast.info("No auctions to process", {
-            description: "There are no active auctions that have ended.",
-          });
+          toast("No auctions to process");
         } else if (result.successfulAuctions === 0) {
-          toast.info(`Processed ${result.processed} auctions`, {
-            description: "No points were awarded because none had bids.",
-          });
+          toast(`Processed ${result.processed} auctions`);
         } else {
-          toast.success(`Processed ${result.processed} auctions`, {
-            description: `Awarded ${result.pointsAwarded} points across ${result.successfulAuctions} successful auctions.`,
-          });
+          toast(`Processed ${result.processed} auctions`);
         }
       } else {
         throw new Error(result.message || "Failed to process auctions");
       }
     } catch (error) {
       console.error("Error processing auctions:", error);
-      toast.error("Failed to process auctions", {
-        description: "There was an error processing the ended auctions.",
-      });
+      toast("Failed to process auctions");
     } finally {
       setProcessingAuctions(false);
     }

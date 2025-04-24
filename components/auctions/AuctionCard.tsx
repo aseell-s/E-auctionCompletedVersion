@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import Chat from "../Chat";
 import { useAuthStore } from "@/store/authStore";
 import { useSession } from "next-auth/react";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { AuctionStatus } from "@prisma/client";
 

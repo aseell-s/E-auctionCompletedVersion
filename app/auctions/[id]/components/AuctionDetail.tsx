@@ -47,6 +47,9 @@ interface AuctionDetailProps {
 export function AuctionDetail({ auction, session }: AuctionDetailProps) {
   const [bidAmount, setBidAmount] = useState(auction.currentPrice + 1);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(auction.currentPrice);
+  const [bidCount, setBidCount] = useState(auction._count.bids);
+  const [bids, setBids] = useState(auction.bids);
 
   const handleBid = async () => {
     if (!session) {
@@ -101,7 +104,19 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
       }
 
       toast.success("Bid placed successfully!");
-      window.location.reload();
+
+      // Update state instead of reloading the page
+      setCurrentPrice(bidAmount);
+      setBidCount((prev) => prev + 1);
+      setBids([
+        ...bids,
+        {
+          id: Math.random().toString(36).slice(2), // Temporary ID for UI
+          amount: bidAmount,
+          bidder: { name: session.user.name || "You" },
+        },
+      ]);
+      setBidAmount(bidAmount + 1);
     } catch (error: unknown) {
       console.error(error);
       toast.error(
@@ -153,7 +168,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
           <div className="space-y-4">
             <div>
               <p className="text-sm text-muted-foreground">Current Price</p>
-              <p className="text-2xl font-bold">  ر.س{auction.currentPrice}</p>
+              <p className="text-2xl font-bold"> ر.س{auction.currentPrice}</p>
             </div>
 
             <div>
@@ -167,7 +182,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
 
             <div>
               <p className="text-sm text-muted-foreground">Total Bids</p>
-              <p className="text-lg">{auction._count.bids}</p>
+              <p className="text-lg">{bidCount}</p>
             </div>
 
             {auction.status === "ACTIVE" &&
@@ -181,7 +196,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
                         Your balance:
                       </span>
                       <span className="font-medium text-indigo-600">
-                         ر.س{session.user.amount.toFixed(2)}
+                        ر.س{session.user.amount.toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -191,7 +206,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
                       type="number"
                       value={bidAmount}
                       onChange={(e) => setBidAmount(Number(e.target.value))}
-                      min={auction.currentPrice + 1}
+                      min={currentPrice + 1}
                       step="1"
                     />
                     <Button onClick={handleBid} disabled={isLoading}>
@@ -203,6 +218,25 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
                   </p>
                 </div>
               )}
+
+            {/* Optionally, show the latest bids */}
+            {/* {bids.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm text-muted-foreground mb-1">
+                  Recent Bids:
+                </p>
+                <ul className="text-sm">
+                  {bids
+                    .slice(-5)
+                    .reverse()
+                    .map((bid) => (
+                      <li key={bid.id}>
+                        ₹{bid.amount} by {bid.bidder.name}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )} */}
           </div>
         </Card>
       </div>

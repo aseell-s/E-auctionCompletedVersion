@@ -18,6 +18,7 @@ import { Search, FilterX } from "lucide-react";
 import { showPointsEarnedToast } from "@/components/ui/PointsNotification";
 import { FiAward, FiTrendingUp } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 interface Auction {
   id: string;
@@ -231,9 +232,17 @@ export function SellerDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h2 className="text-2xl font-bold">My Listed Auctions</h2>
-        <Link href="/auctions/create">
-          <Button>Create New Auction</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/auctions/create">
+            <Button>Create New Auction</Button>
+          </Link>
+          <Button
+            variant="outline"
+            onClick={() => toast.success("Sonner toast is working!")}
+          >
+            Test Toast
+          </Button>
+        </div>
       </div>
 
       {renderPointsEarnedHeader()}
