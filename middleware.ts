@@ -1,43 +1,41 @@
-import { withAuth } from 'next-auth/middleware';
-import { NextResponse } from 'next/server';
+import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
+
 export default withAuth(
   function middleware(req) {
-    // If the user is already logged in, redirect him to dashboard
-    // if he tries to access the login or register page
     const token = req.nextauth.token;
-    const isAuth = !!token;
-    const isAuthPage =
-      req.nextUrl.pathname.startsWith('/login') ||
-      req.nextUrl.pathname.startsWith('/register') ||
-      req.nextUrl.pathname.startsWith('/sellerRegister');
 
-    if (isAuthPage) {
-      console.log('isAuthPage: ', isAuthPage);
-      console.log('isAuth: ', isAuth);
-      if (isAuth) {
-        return NextResponse.redirect(new URL('/dashboard', req.url));
-      }
-      return null; // If not logged in, allow access to login and register pages
+    // Check if token is valid - if it has an error property, it's invalid
+    const isValidToken = token && !token.error;
+
+    const isAuthPage =
+      req.nextUrl.pathname.startsWith("/login") ||
+      req.nextUrl.pathname.startsWith("/register") ||
+      req.nextUrl.pathname.startsWith("/sellerRegister");
+
+    // If trying to access auth pages with a valid token, redirect to dashboard
+    if (isAuthPage && isValidToken) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // If the user is not logged in, redirect him to login page
-    // with the original URL as a parameter so that we can redirect
-    // him back to the original page after login
-    if (!isAuth) {
+    // If trying to access protected pages without a valid token, redirect home
+    if (!isValidToken && !isAuthPage) {
       let from = req.nextUrl.pathname;
       if (req.nextUrl.search) {
         from += req.nextUrl.search;
       }
-
-      // return NextResponse.redirect(
-      //   new URL(`/login?from=${encodeURIComponent(from)}`, req.url)
-      // );
-      return NextResponse.redirect(new URL(`/`, req.url));
+      return NextResponse.redirect(new URL(`/login`, req.url));
     }
+
+    // Allow the request to proceed
+    return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => true, // always allow access if there is a token
+      authorized: ({ token }) => {
+        // Always proceed to the middleware function
+        return true;
+      },
     },
   }
 );
@@ -53,7 +51,6 @@ export const config = {
      * - login
      * - register
      */
-    // '/((?!api|_next/static|_next/image|favicon.ico|login|register).*)',
-    '/((?!api|_next/static|_next/image|favicon.ico|login|register|$).*)',
+    "/((?!api|_next/static|_next/image|favicon.ico|login|register|$).*)",
   ],
 };
