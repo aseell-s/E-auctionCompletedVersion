@@ -231,7 +231,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
                     .reverse()
                     .map((bid) => (
                       <li key={bid.id}>
-                        ₹{bid.amount} by {bid.bidder.name}
+                        ﷼{bid.amount} by {bid.bidder.name}
                       </li>
                     ))}
                 </ul>

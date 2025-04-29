@@ -236,12 +236,12 @@ export function SellerDashboard() {
           <Link href="/auctions/create">
             <Button>Create New Auction</Button>
           </Link>
-          <Button
+          {/* <Button
             variant="outline"
             onClick={() => toast.success("Sonner toast is working!")}
           >
             Test Toast
-          </Button>
+          </Button> */}
         </div>
       </div>
 

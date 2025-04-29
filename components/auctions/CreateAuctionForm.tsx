@@ -231,7 +231,7 @@ export function CreateAuctionForm() {
               name="startPrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Starting Price (₹)</FormLabel>
+                  <FormLabel>Starting Price (﷼)</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
