@@ -79,7 +79,7 @@ export default function Login() {
                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 hover:text-gray-700"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "🥶" : "🥵"}
+                {showPassword ? "👁" : "👁‍🗨"}
               </span>
             </div>
 

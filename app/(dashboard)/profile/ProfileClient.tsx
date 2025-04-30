@@ -466,7 +466,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                       href="mailto:admin@example.com"
                       className="text-blue-600 hover:underline"
                     >
-                      admin@example.com
+                      aseeellosman@gmail.com
                     </a>
                   </div>
                 </>
