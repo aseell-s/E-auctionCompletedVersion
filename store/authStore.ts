@@ -14,10 +14,10 @@ interface AuthStore extends AuthState {
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
-  isLoading: true,
+  isLoading: true, // Start with loading state
   error: null,
 
-  setUser: (user) => set({ user }),
+  setUser: (user) => set({ user, isLoading: false }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
 
@@ -43,5 +43,5 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
   },
 
-  logout: () => set({ user: null, error: null }),
+  logout: () => set({ user: null, error: null, isLoading: false }),
 }));

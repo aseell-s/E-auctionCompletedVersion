@@ -4,8 +4,6 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function clearDatabase() {
-  await prisma.watchlist.deleteMany({ where: {} });
-  await prisma.comment.deleteMany({ where: {} });
   await prisma.bid.deleteMany({ where: {} });
   await prisma.auction.deleteMany({ where: {} });
   await prisma.profile.deleteMany({ where: {} });

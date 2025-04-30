@@ -22,12 +22,10 @@ export async function POST(req: Request) {
       postalCode,
       establishmentYear,
       natureOfBusiness,
-      panTanNo,
       contactName,
       contactPhoneNo,
       country,
       dob,
-      taxId,
     } = body;
 
     // Check if user already exists
@@ -64,12 +62,10 @@ export async function POST(req: Request) {
             pincode: postalCode,
             establishedAt: new Date(establishmentYear),
             natureOfBusiness,
-            panNo: panTanNo,
             contactNo: contactPhoneNo,
             company: companyName,
             country,
             dob: new Date(dob),
-            taxId,
           },
         },
       },

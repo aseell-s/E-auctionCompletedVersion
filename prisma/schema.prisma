@@ -21,8 +21,6 @@ model User {
 
   auctions         Auction[]      @relation("SellerAuctions")
   bids             Bid[]          @relation("UserBids")
-  Comment          Comment[]
-  watchlist        Watchlist[]
   favorites        UserFavorite[]
   sentMessages     Message[]      @relation("SentMessages")
   receivedMessages Message[]      @relation("ReceivedMessages")
@@ -40,37 +38,34 @@ model Profile {
   pincode          String?
   establishedAt    DateTime?
   natureOfBusiness String?
-  panNo            String?
   contactNo        String?
   dob              DateTime?
   address          String?
   country          String?
   company          String? // Only for sellers
-  taxId            String? // Only for sellers
   createdAt        DateTime  @default(now())
 }
 
 model Auction {
-  id           String        @id @default(cuid())
-  title        String
-  description  String
-  startPrice   Float
-  currentPrice Float
-  itemType     String        @default("IRON")
-  images       String[] // Array of image URLs
-  seller       User          @relation("SellerAuctions", fields: [sellerId], references: [id])
-  sellerId     String
-  bids         Bid[]
-  status       AuctionStatus @default(PENDING)
-  isApproved   Boolean       @default(false)
-  createdAt    DateTime      @default(now())
-  endTime      DateTime
-  updatedAt    DateTime      @updatedAt
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  startPrice    Float
+  currentPrice  Float
+  itemType      String        @default("IRON")
+  images        String[] // Array of image URLs
+  seller        User          @relation("SellerAuctions", fields: [sellerId], references: [id])
+  sellerId      String
+  bids          Bid[]
+  status        AuctionStatus @default(PENDING)
+  isApproved    Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  endTime       DateTime
+  updatedAt     DateTime      @updatedAt
+  pointsAwarded Boolean       @default(false) // Track if points have been awarded
 
-  Comment       Comment[]
-  watchlistedBy Watchlist[]
-  favoritedBy   UserFavorite[]
-  messages      Message[]
+  favoritedBy UserFavorite[]
+  messages    Message[]
 }
 
 model Bid {
@@ -85,7 +80,6 @@ model Bid {
   @@index([auctionId])
   @@index([bidderId])
 }
-
 
 // User Favorites relation table
 model UserFavorite {

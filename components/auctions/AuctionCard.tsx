@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import Chat from "../Chat";
 import { useAuthStore } from "@/store/authStore";
 import { useSession } from "next-auth/react";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { AuctionStatus } from "@prisma/client";
 
@@ -95,7 +94,7 @@ export function AuctionCard({ auction }: AuctionCardProps) {
       <CardContent>
         <div className="space-y-2">
           <p>
-            <span className="font-medium">Current Price:</span> ₹
+            <span className="font-medium">Current Price:</span> ﷼
             {auction.currentPrice}
           </p>
           <p>

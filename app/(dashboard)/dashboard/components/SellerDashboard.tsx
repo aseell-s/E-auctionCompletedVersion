@@ -18,6 +18,7 @@ import { Search, FilterX } from "lucide-react";
 import { showPointsEarnedToast } from "@/components/ui/PointsNotification";
 import { FiAward, FiTrendingUp } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 interface Auction {
   id: string;
@@ -95,13 +96,18 @@ export function SellerDashboard() {
 
           // Only show notifications for auctions we haven't shown yet
           recentlyEnded.forEach(
-            (auction: { id: string; pointsAwarded: number; title: string }) => {
+            (auction: {
+              id: string;
+              title: string;
+              sellerPoints: number;
+              pointsAwardedValue: boolean;
+            }) => {
               if (
-                auction.pointsAwarded > 0 &&
+                auction.pointsAwardedValue &&
+                auction.sellerPoints > 0 &&
                 !shownNotifications.has(auction.id)
               ) {
-                showPointsEarnedToast(auction.title, auction.pointsAwarded);
-                // Track that we've shown this notification
+                showPointsEarnedToast(auction.title, auction.sellerPoints);
                 setShownNotifications((prev) => new Set(prev).add(auction.id));
               }
             }
@@ -177,9 +183,12 @@ export function SellerDashboard() {
   const renderPointsEarnedHeader = () => {
     if (recentlyEndedAuctions.length === 0) return null;
 
-    // Calculate total points from recently ended auctions
+    // Sum sellerPoints from recently ended auctions
     const totalRecentPoints = recentlyEndedAuctions.reduce(
-      (sum, auction) => sum + (auction.pointsAwarded || 0),
+      (sum, auction) =>
+        auction.pointsAwarded && auction.sellerPoints > 0
+          ? sum + auction.sellerPoints
+          : sum,
       0
     );
 
@@ -223,9 +232,17 @@ export function SellerDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h2 className="text-2xl font-bold">My Listed Auctions</h2>
-        <Link href="/auctions/create">
-          <Button>Create New Auction</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/auctions/create">
+            <Button>Create New Auction</Button>
+          </Link>
+          {/* <Button
+            variant="outline"
+            onClick={() => toast.success("Sonner toast is working!")}
+          >
+            Test Toast
+          </Button> */}
+        </div>
       </div>
 
       {renderPointsEarnedHeader()}
@@ -284,8 +301,8 @@ export function SellerDashboard() {
         {/* Price range */}
         <div className="mt-3 px-1">
           <div className="flex justify-between text-sm text-muted-foreground mb-1.5">
-            <span>Price: ₹{priceRange[0].toLocaleString()}</span>
-            <span>₹{priceRange[1].toLocaleString()}</span>
+            <span>Price: ﷼{priceRange[0].toLocaleString()}</span>
+            <span>﷼{priceRange[1].toLocaleString()}</span>
           </div>
           <Slider
             defaultValue={[0, maxPrice]}
@@ -299,8 +316,8 @@ export function SellerDashboard() {
             className="mt-2 w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>₹0</span>
-            <span>₹{maxPrice.toLocaleString()}</span>
+            <span>﷼0</span>
+            <span>﷼{maxPrice.toLocaleString()}</span>
           </div>
         </div>
       </Card>

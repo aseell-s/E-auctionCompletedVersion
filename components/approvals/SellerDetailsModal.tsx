@@ -47,23 +47,23 @@ export function SellerDetailsModal({
 }: SellerDetailsModalProps) {
   useEffect(() => {
     if (isOpen && seller) {
-      console.log('SellerDetailsModal - Received seller data:', {
+      console.log("SellerDetailsModal - Received seller data:", {
         id: seller.id,
         name: seller.name,
         email: seller.email,
-        profile: seller.profile
+        profile: seller.profile,
       });
     }
   }, [isOpen, seller]);
 
   const handleApprove = () => {
-    console.log('SellerDetailsModal - Approving seller:', seller.id);
+    console.log("SellerDetailsModal - Approving seller:", seller.id);
     onApprove(seller.id);
     onClose();
   };
 
   const handleReject = () => {
-    console.log('SellerDetailsModal - Rejecting seller:', seller.id);
+    console.log("SellerDetailsModal - Rejecting seller:", seller.id);
     onReject(seller.id);
     onClose();
   };
@@ -119,14 +119,6 @@ export function SellerDetailsModal({
                     <span>{seller.profile.companyRegNo || "N/A"}</span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="font-medium">Tax ID:</span>
-                    <span>{seller.profile.taxId || "N/A"}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="font-medium">PAN No:</span>
-                    <span>{seller.profile.panNo || "N/A"}</span>
-                  </div>
-                  <div className="flex gap-2">
                     <span className="font-medium">Nature of Business:</span>
                     <span>{seller.profile.natureOfBusiness || "N/A"}</span>
                   </div>
@@ -170,7 +162,10 @@ export function SellerDetailsModal({
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">
-            <Button onClick={handleApprove} className="bg-green-500 hover:bg-green-600">
+            <Button
+              onClick={handleApprove}
+              className="bg-green-500 hover:bg-green-600"
+            >
               Approve Seller
             </Button>
             <Button onClick={handleReject} variant="destructive">

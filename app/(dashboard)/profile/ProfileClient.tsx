@@ -5,7 +5,7 @@ import { Role } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  FiDollarSign,
+  // FiDollarSign, // Removed
   FiAward,
   FiUser,
   FiMail,
@@ -28,7 +28,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 
-// Password change schema
 const passwordSchema = z
   .object({
     currentPassword: z
@@ -36,7 +35,15 @@ const passwordSchema = z
       .min(1, { message: "Current password is required" }),
     newPassword: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
+      .min(8, { message: "Password must be at least 8 characters" })
+      // lookahead for at least one digit and one special character
+      .regex(
+        /^(?=.*[0-9])(?=.*[!@#$%^&*()_\-+=\[{\]};:'",<.>/?\\|`~]).*$/,
+        {
+          message:
+            "Password must include at least one number and one special character",
+        }
+      ),
     confirmPassword: z
       .string()
       .min(8, { message: "Confirm password is required" }),
@@ -232,11 +239,12 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               {user.role === Role.BUYER && (
                 <div className="w-full mt-6 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white shadow-lg">
                   <div className="flex items-center mb-2">
-                    <FiDollarSign className="mr-2" size={20} />
+                    {/* Replace FiDollarSign with SAR symbol */}
+                    <span className="mr-2 text-xl font-bold">﷼</span>
                     <h3 className="text-lg font-medium">Your Balance</h3>
                   </div>
                   <p className="text-3xl font-bold">
-                    ${user.amount.toFixed(2)}
+                    ﷼{user.amount.toFixed(2)}
                   </p>
                 </div>
               )}
@@ -253,11 +261,12 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
                   <div className="w-full mt-4 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white shadow-lg">
                     <div className="flex items-center mb-2">
-                      <FiDollarSign className="mr-2" size={20} />
+                      {/* Replace FiDollarSign with SAR symbol */}
+                      <span className="mr-2 text-xl font-bold">﷼</span>
                       <h3 className="text-lg font-medium">Your Balance</h3>
                     </div>
                     <p className="text-3xl font-bold">
-                      ${user.amount.toFixed(2)}
+                      ﷼{user.amount.toFixed(2)}
                     </p>
                   </div>
                 </>
@@ -437,26 +446,31 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               )}
 
               {/* Conditional Content for Contact */}
-              <div className="p-6 mt-8 border-t-2 border-gray-300">
-                <h3 className="text-2xl text-indigo-500 font-bold mb-2">
-                  {user.role === Role.BUYER
-                    ? "Contact to add Funds here"
-                    : "Contact to Redeem Points here"}
-                </h3>
-                <p className="text-sm mb-4">
-                  For{" "}
-                  {user.role === Role.BUYER
-                    ? "adding funds"
-                    : "redeeming points"}{" "}
-                  to your account, reach out to:
-                </p>
-                <a
-                  href="mailto:admin@example.com"
-                  className="text-blue-600 hover:underline"
-                >
-                  admin@example.com
-                </a>
-              </div>
+
+              {user.role != Role.SUPER_ADMIN && (
+                <>
+                  <div className="p-6 mt-8 border-t-2 border-gray-300">
+                    <h3 className="text-2xl text-indigo-500 font-bold mb-2">
+                      {user.role === Role.BUYER
+                        ? "Contact to add Funds here"
+                        : "Contact to Redeem Points here"}
+                    </h3>
+                    <p className="text-sm mb-4">
+                      For{" "}
+                      {user.role === Role.BUYER
+                        ? "adding funds"
+                        : "redeeming points"}{" "}
+                      to your account, reach out to:
+                    </p>
+                    <a
+                      href="mailto:admin@example.com"
+                      className="text-blue-600 hover:underline"
+                    >
+                      admin@example.com
+                    </a>
+                  </div>
+                </>
+              )}
             </Tabs>
           </Card>
         </div>

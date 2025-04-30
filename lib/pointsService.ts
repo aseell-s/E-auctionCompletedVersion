@@ -77,7 +77,7 @@ export const awardSellerPoints = async (
 
     console.log(`Current seller points: ${seller.points || 0}`);
 
-    // CRITICAL FIX: Make sure the update is properly executed and committed
+    // This updates the seller's points in the DB
     const updatedUser = await prisma.user.update({
       where: { id: sellerId },
       data: {

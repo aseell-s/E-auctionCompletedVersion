@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Role } from "@prisma/client";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { FiUser, FiX, FiDollarSign, FiAward } from "react-icons/fi";
+import { FiUser, FiX, FiAward } from "react-icons/fi"; // Removed FiDollarSign
 
 interface NavbarProps {
   user: {
@@ -37,7 +37,6 @@ export function Navbar({ user }: NavbarProps) {
     ],
     [Role.BUYER]: [
       // { label: 'My Auctions', href: '/auctions' },
-      // { label: "Watchlist", href: "/watchlist" },
     ],
   };
 
@@ -77,9 +76,10 @@ export function Navbar({ user }: NavbarProps) {
         {/* Balance Display - Removed hidden md:flex to show on all screen sizes */}
         {user.role === Role.BUYER && typeof user.amount === "number" && (
           <div className="flex items-center bg-indigo-100 px-4 py-2 rounded-full shadow-sm border border-indigo-200 mr-4">
-            <FiDollarSign className="text-indigo-600 mr-2" />
+            {/* Replace FiDollarSign with SAR symbol */}
+            <span className="text-indigo-600 mr-2 text-xl font-bold">﷼</span>
             <span className="font-semibold text-indigo-800">
-              ${user.amount.toFixed(2)}
+              {user.amount.toFixed(2)}
             </span>
           </div>
         )}
@@ -124,11 +124,12 @@ export function Navbar({ user }: NavbarProps) {
         {user.role === Role.BUYER && typeof user.amount === "number" && (
           <div className="px-6 pt-4 pb-2">
             <div className="flex items-center bg-indigo-100 px-4 py-3 rounded-lg">
-              <FiDollarSign className="text-indigo-600 mr-2" size={18} />
+              {/* Replace FiDollarSign with SAR symbol */}
+              <span className="text-indigo-600 mr-2 text-xl font-bold">﷼</span>
               <div>
                 <p className="text-xs text-indigo-600">Your Balance</p>
                 <p className="font-semibold text-indigo-800">
-                  ${user.amount.toFixed(2)}
+                  {user.amount.toFixed(2)}
                 </p>
               </div>
             </div>

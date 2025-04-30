@@ -51,7 +51,7 @@ export function AuctionDetailsModal({
 }: AuctionDetailsModalProps) {
   useEffect(() => {
     if (isOpen && auction) {
-      console.log('AuctionDetailsModal - Received auction data:', {
+      console.log("AuctionDetailsModal - Received auction data:", {
         id: auction.id,
         title: auction.title,
         description: auction.description,
@@ -61,19 +61,18 @@ export function AuctionDetailsModal({
         seller: auction.seller,
         images: auction.images,
         bids: auction.bids,
-        comments: auction.Comment
       });
     }
   }, [isOpen, auction]);
 
   const handleApprove = () => {
-    console.log('AuctionDetailsModal - Approving auction:', auction.id);
+    console.log("AuctionDetailsModal - Approving auction:", auction.id);
     onApprove(auction.id);
     onClose();
   };
 
   const handleReject = () => {
-    console.log('AuctionDetailsModal - Rejecting auction:', auction.id);
+    console.log("AuctionDetailsModal - Rejecting auction:", auction.id);
     onReject(auction.id);
     onClose();
   };
@@ -96,11 +95,11 @@ export function AuctionDetailsModal({
               <h3 className="font-semibold">Auction Information</h3>
               <div className="mt-2 space-y-2">
                 <p>
-                  <span className="text-gray-600">Start Price:</span> $
+                  <span className="text-gray-600">Start Price:</span> ﷼
                   {auction.startPrice.toFixed(2)}
                 </p>
                 <p>
-                  <span className="text-gray-600">Current Price:</span> $
+                  <span className="text-gray-600">Current Price:</span> ﷼
                   {auction.currentPrice.toFixed(2)}
                 </p>
                 <p>
@@ -180,33 +179,11 @@ export function AuctionDetailsModal({
                     className="flex justify-between items-center p-2 bg-gray-50 rounded"
                   >
                     <span>
-                      {bid.bidder.name} bid ${bid.amount.toFixed(2)}
+                      {bid.bidder.name} bid ﷼{bid.amount.toFixed(2)}
                     </span>
                     <span className="text-sm text-gray-500">
                       {formatDate(bid.createdAt)}
                     </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {auction.Comment && auction.Comment.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-2">Comments</h3>
-              <div className="space-y-2">
-                {auction.Comment.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="p-2 bg-gray-50 rounded"
-                  >
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{comment.user.name}</span>
-                      <span className="text-sm text-gray-500">
-                        {formatDate(comment.createdAt)}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-gray-700">{comment.text}</p>
                   </div>
                 ))}
               </div>

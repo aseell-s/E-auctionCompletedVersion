@@ -20,13 +20,11 @@ export interface Profile {
   pincode?: string;
   establishedAt?: Date;
   natureOfBusiness?: string;
-  panNo?: string;
   contactNo?: string;
   dob?: Date;
   address?: string;
   country?: string;
   company?: string;
-  taxId?: string;
 }
 
 export interface Bid {
@@ -34,16 +32,6 @@ export interface Bid {
   amount: number;
   createdAt: Date;
   bidder: {
-    id: string;
-    name: string;
-  };
-}
-
-export interface Comment {
-  id: string;
-  text: string;
-  createdAt: Date;
-  user: {
     id: string;
     name: string;
   };
@@ -69,7 +57,6 @@ export interface Auction {
     profile?: Profile;
   };
   bids?: Bid[];
-  comments?: Comment[];
 }
 
 export interface ApprovalsData {

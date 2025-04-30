@@ -28,10 +28,8 @@ export async function processEndedAuctions(): Promise<ProcessingResult> {
       `Finding expired auctions (current time: ${now.toISOString()})`
     );
 
-    // FIRST ISSUE: The query might be too restrictive. Let's debug and modify it.
     const expiredAuctions = await prisma.auction.findMany({
       where: {
-        status: AuctionStatus.ACTIVE, // Only process active auctions
         endTime: {
           lt: now, // Where the end time is in the past
         },
@@ -51,6 +49,7 @@ export async function processEndedAuctions(): Promise<ProcessingResult> {
             points: true,
           },
         },
+        // Include pointsAwarded field
       },
       orderBy: {
         endTime: "desc",
@@ -111,20 +110,10 @@ export async function processEndedAuctions(): Promise<ProcessingResult> {
         previousStatus,
       };
 
-      // Check if auction had bids (was successful)
-      if (auction._count.bids > 0) {
+      // Only award points if not already awarded and auction had bids
+      if (!auction.pointsAwarded && auction._count.bids > 0) {
         try {
-          // Get seller's points before update for verification
-          const sellerBefore = await prisma.user.findUnique({
-            where: { id: auction.sellerId },
-            select: { points: true },
-          });
-
-          console.log(
-            `Seller ${auction.sellerId} has ${sellerBefore?.points} points before award`
-          );
-
-          // Award points to seller
+          // This function updates the seller's points in the DB
           const pointsAwarded = await awardSellerPoints(
             auction.sellerId,
             auction.id
@@ -136,15 +125,11 @@ export async function processEndedAuctions(): Promise<ProcessingResult> {
             pointsAwarded
           );
 
-          // Get seller's points after update for verification
-          const sellerAfter = await prisma.user.findUnique({
-            where: { id: auction.sellerId },
-            select: { points: true },
+          // Mark auction as points awarded
+          await prisma.auction.update({
+            where: { id: auction.id },
+            data: { pointsAwarded: true },
           });
-
-          console.log(
-            `Seller ${auction.sellerId} now has ${sellerAfter?.points} points after award (added ${pointsAwarded})`
-          );
 
           totalPointsAwarded += pointsAwarded;
           successfulAuctions++;
@@ -160,10 +145,14 @@ export async function processEndedAuctions(): Promise<ProcessingResult> {
           );
           auctionDetail.pointsAwarded = 0;
         }
-      } else {
+      } else if (auction._count.bids === 0) {
         noActivityAuctions++;
         console.log(
           `Auction ${auction.id} ended with no bids - no points awarded`
+        );
+      } else if (auction.pointsAwarded) {
+        console.log(
+          `Auction ${auction.id} already had points awarded, skipping`
         );
       }
 
