@@ -1,3 +1,25 @@
+// 1. Displays a modal dialog to show detailed information about an auction.
+// 2. Accepts props:
+//    - isOpen: Controls whether the modal is visible.
+//    - onClose: Function to close the modal.
+//    - auction: The auction object containing details like title, description, prices, seller info, etc.
+//    - onApprove: Function to handle auction approval.
+//    - onReject: Function to handle auction rejection.
+// 3. Logs auction details to the console when the modal is opened.
+// 4. Provides handlers for:
+//    - Approving the auction (calls onApprove and closes the modal).
+//    - Rejecting the auction (calls onReject and closes the modal).
+// 5. Displays auction details, including:
+//    - Title, description, start price, current price, creation date, end time, and status.
+//    - Seller information (name, email, company, phone, location).
+//    - Auction images in a grid layout.
+//    - List of bids with bidder name, bid amount, and bid date.
+//    - Comments with commenter name, text, and date.
+// 6. Includes action buttons for:
+//    - Canceling (closes the modal).
+//    - Rejecting the auction.
+//    - Approving the auction.
+// 7. Uses Tailwind CSS for styling the modal and its content.
 "use client";
 
 import {

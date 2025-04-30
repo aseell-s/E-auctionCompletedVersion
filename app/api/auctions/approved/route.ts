@@ -1,3 +1,7 @@
+// - Shows auction data based on user role (buyer/seller).
+// - Updates auction status (like ending expired ones).
+// - Improves user experience with helpful auction info.
+// - Key part of the backend for handling auction logic
 import { NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";

@@ -1,3 +1,7 @@
+// - Sets up login and session handling using NextAuth.
+// - Adds extra user data (like amount and points) to the session.
+// - Customizes sign-in page and session settings.
+// - Manages how users stay logged in.
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";

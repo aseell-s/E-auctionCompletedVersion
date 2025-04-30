@@ -1,3 +1,22 @@
+// 1. Displays a modal dialog to show detailed information about a seller's registration.
+// 2. Accepts props:
+//    - isOpen: Controls whether the modal is visible.
+//    - onClose: Function to close the modal.
+//    - seller: The seller object containing personal, business, and contact details.
+//    - onApprove: Function to handle seller approval.
+//    - onReject: Function to handle seller rejection.
+// 3. Logs seller details to the console when the modal is opened (for debugging purposes).
+// 4. Provides handlers for:
+//    - Approving the seller (calls onApprove and closes the modal).
+//    - Rejecting the seller (calls onReject and closes the modal).
+// 5. Displays seller details, including:
+//    - Personal Information: Name, email, phone, and date of birth.
+//    - Business Information: Company name, registration number, tax ID, PAN number, nature of business, and establishment date.
+//    - Contact Information: Address, city, state, country, and pincode.
+// 6. Includes action buttons for:
+//    - Approving the seller.
+//    - Rejecting the seller.
+// 7. Uses Tailwind CSS for styling the modal and its content.
 "use client";
 
 import {

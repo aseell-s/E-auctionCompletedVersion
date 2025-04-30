@@ -1,3 +1,9 @@
+/*
+Lets admins approve sellers so they can use the platform.
+Makes sure only SUPER_ADMIN users can do this action.
+Checks if the seller exists and has the correct role before approving.
+Supports admin tools used to manage seller approvals.
+*/
 import { NextResponse } from "next/server";
 import { PrismaClient, Role } from "@prisma/client";
 import { getServerSession } from "next-auth";

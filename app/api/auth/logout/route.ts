@@ -1,3 +1,7 @@
+// - POST API to log the user out using NextAuth.
+// - Redirects to the homepage after logout.
+// - Includes error handling for any logout issues.
+
 import { signOut } from "next-auth/react";
 import { NextResponse } from "next/server";
 

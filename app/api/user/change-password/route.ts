@@ -1,3 +1,7 @@
+// - POST API for logged-in users to update their password.
+// - Verifies current password and hashes the new one.
+// - Updates the password in the database securely.
+// - Includes strong authentication and error handling.
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";

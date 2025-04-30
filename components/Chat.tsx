@@ -1,3 +1,19 @@
+// 1. Provides a real-time chat interface for users to communicate during an auction.
+// 2. Displays messages between the current user and the seller, including:
+//    - Sent messages (by the current user).
+//    - Received messages (from the seller).
+// 3. Fetches existing messages for the auction from the `/api/messages/:auctionId` endpoint when the component loads.
+// 4. Implements polling to fetch new messages every 5 seconds for real-time updates.
+// 5. Allows users to send messages by:
+//    - Typing in an input field.
+//    - Clicking the send button (or pressing Enter).
+//    - Sending the message to the `/api/messages` endpoint via a POST request.
+// 6. Optimistically updates the chat UI with the new message before the server confirms it.
+//    - Removes the message if the server request fails and displays an error.
+// 7. Automatically scrolls to the latest message when new messages are added.
+// 8. Displays a loading state while fetching messages and a placeholder if no messages exist.
+// 9. Restricts chat functionality to authenticated users using `next-auth`'s `useSession` hook.
+// 10. Uses Tailwind CSS for responsive and visually appealing styling.
 import React, { useState, useEffect, useRef } from "react";
 import { MdSend } from "react-icons/md";
 import Image from "next/image";

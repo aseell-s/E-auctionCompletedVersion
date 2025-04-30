@@ -1,3 +1,6 @@
+// - DELETE API to remove an auction from user's favorites.
+// - Only available to logged-in users.
+// - Deletes the record from the userFavorite table using Prisma.
 import { NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";

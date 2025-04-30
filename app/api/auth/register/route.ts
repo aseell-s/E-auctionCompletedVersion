@@ -1,3 +1,7 @@
+// - POST API to create a new user account.
+// - Takes email, password, and name.
+// - Validates input and checks if user already exists.
+// - Hashes password and saves user to the database using Prisma.
 import { NextResponse } from "next/server";
 import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";

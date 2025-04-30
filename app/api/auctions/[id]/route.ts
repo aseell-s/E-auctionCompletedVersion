@@ -1,3 +1,9 @@
+// - Only admins or the seller can end the auction.
+// - Checks if the auction exists, is not already ended, and end time has passed.
+// - Sends money to the seller if there's a winning bid (may also give points).
+// - Marks the auction as "ENDED" in the database.
+
+
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
