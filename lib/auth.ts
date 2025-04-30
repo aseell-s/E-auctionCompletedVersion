@@ -6,3 +6,7 @@ export const getAuthSession = async () => {
 };
 
 export { authOptions };
+
+// 1. Retrieves the current user's session using NextAuth's `getServerSession` function.
+// 2. Uses the `authOptions` configuration for authentication settings.
+// 3. Simplifies session retrieval for server-side components or API routes.

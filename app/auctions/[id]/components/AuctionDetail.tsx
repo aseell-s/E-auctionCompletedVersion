@@ -168,7 +168,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
           <div className="space-y-4">
             <div>
               <p className="text-sm text-muted-foreground">Current Price</p>
-              <p className="text-2xl font-bold"> ﷼{auction.currentPrice}</p>
+              <p className="text-2xl font-bold"> SAR{auction.currentPrice}</p>
             </div>
 
             <div>
@@ -196,7 +196,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
                         Your balance:
                       </span>
                       <span className="font-medium text-indigo-600">
-                        ﷼{session.user.amount.toFixed(2)}
+                        SAR{session.user.amount.toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -214,7 +214,7 @@ export function AuctionDetail({ auction, session }: AuctionDetailProps) {
                     </Button>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Minimum bid: ﷼{auction.currentPrice + 1}
+                    Minimum bid: SAR{auction.currentPrice + 1}
                   </p>
                 </div>
               )}

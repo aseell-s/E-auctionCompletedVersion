@@ -1,3 +1,18 @@
+// This file defines a file upload router using the UploadThing library.
+// 1. `ourFileRouter`: Defines routes for handling file uploads.
+//    - `imageUploader`: A route for uploading images with the following settings:
+//      - Maximum file size: 4MB.
+//      - Maximum file count: 10.
+// 2. Middleware:
+//    - Temporarily bypasses authentication for testing purposes (returns a test user ID).
+//    - Logs when the middleware is called.
+//    - Includes commented-out authentication logic for production use.
+// 3. `onUploadComplete`:
+//    - Executes after a file upload is complete.
+//    - Logs the uploaded file details to the console.
+//    - Returns the file's URL.
+// 4. Ensures the router satisfies the `FileRouter` type.
+// 5. Exports the `OurFileRouter` type for use in other parts of the application.
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 // import { getServerSession } from "next-auth/next";
 // import { authOptions } from "@/lib/auth";

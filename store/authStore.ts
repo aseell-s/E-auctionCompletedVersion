@@ -1,3 +1,16 @@
+// This file defines an authentication store using Zustand for state management.
+// 1. Manages authentication-related state, including:
+//    - `user`: The currently authenticated user.
+//    - `isLoading`: Whether authentication data is being loaded.
+//    - `error`: Any error related to authentication.
+// 2. Provides actions to update the state:
+//    - `setUser`: Updates the current user.
+//    - `setLoading`: Updates the loading state.
+//    - `setError`: Updates the error state.
+//    - `syncWithSession`: Syncs the store with a NextAuth session.
+//    - `logout`: Clears the user and error state to log out the user.
+// 3. Uses Zustand's `create` function to define the store.
+
 "use client";
 
 import { create } from "zustand";

@@ -1,3 +1,10 @@
+// This file provides utility functions for handling user authentication and session management.
+// 1. `getCurrentUser`: Retrieves the current authenticated user from the session.
+// 2. `isAuthenticated`: Checks if a user is currently authenticated.
+// 3. `hasRole`: Verifies if the authenticated user has a specific role.
+// 4. `isApproved`: Checks if the authenticated user is approved.
+// 5. Defines a custom `AuthSession` type that extends the default session to include:
+//    - User ID, role, approval status, email, and optional name.
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Session } from "next-auth";

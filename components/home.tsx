@@ -37,7 +37,7 @@ function ModernHomePage() {
             <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg px-6 py-10 text-center space-y-4 hover:shadow-2xl transition duration-300">
               <h1 className="text-xl sm:text-6xl lg:text-6xl font-extrabold leading-tight text-indigo-800">
                 <span className="block text-7xl sm:text-7xl lg:text-8xl text-indigo-800">
-                  Gluby
+                  GLUBY
                 </span>
                 <span className="block text-indigo-500 text-2xl sm:text-4xl mt-4 leading-snug">
                   Where Recycling
@@ -81,7 +81,7 @@ function ModernHomePage() {
               <div className="relative z-10 p-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-indigo-100 space-y-6 hover:shadow-2xl transition">
                 {[
                   {
-                    icon: "♻️",
+                    icon: "♻",
                     bg: "bg-green-100 text-green-600",
                     title: "Eco Auctions",
                     desc: "Turn Waste Into Value",

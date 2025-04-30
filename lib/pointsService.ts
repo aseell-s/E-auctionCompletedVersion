@@ -1,3 +1,13 @@
+// This function `calculatePoints` calculates reward points for an auction based on:
+// 1. The final price of the auction (`finalPrice`):
+//    - 1 point is awarded for every $100.
+// 2. The number of bids (`bidCount`):
+//    - 20 points are awarded for each bid.
+// 3. A bonus for highly contested auctions (5 or more bids):
+//    - 200 bonus points are awarded if there are 5 or more bids.
+// 4. The total points are the sum of price points, bid points, and bonus points.
+// 5. Logs the detailed points calculation to the console for debugging.
+// 6. Returns the total calculated points.
 import prisma from "./prisma";
 
 /**

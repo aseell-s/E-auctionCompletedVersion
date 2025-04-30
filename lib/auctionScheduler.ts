@@ -1,3 +1,18 @@
+// 1. Processes auctions that have ended but are still marked as "ACTIVE."
+// 2. Fetches expired auctions from the database, including:
+//    - Bid count
+//    - Highest bid
+//    - Seller details
+// 3. Updates the status of expired auctions to "ENDED."
+// 4. Awards points to sellers for successful auctions with bids.
+// 5. Records points transactions for awarded points.
+// 6. Handles auctions with no bids by marking them as ended without awarding points.
+// 7. Logs details of processed auctions for debugging and tracking.
+// 8. Returns a summary of the processing, including:
+//    - Total auctions processed
+//    - Points awarded
+//    - Successful auctions
+//    - Auctions with no activity
 import prisma from "./prisma";
 import { awardSellerPoints, recordPointsTransaction } from "./pointsService";
 import { AuctionStatus } from "@prisma/client";

@@ -1,5 +1,14 @@
 // Custom wrapper for UploadThing components with enhanced debugging
-
+// This file provides components for debugging and handling file uploads using the UploadThing library.
+// 1. Imports functions to generate upload components (`UploadDropzone`, `UploadButton`).
+// 2. Defines `DebugUploadDropzone`:
+//    - A wrapper around the `UploadDropzone` component for debugging purposes.
+//    - Logs props and selected files to the console for debugging.
+//    - Displays a "Debug Mode Enabled" message above the dropzone.
+// 3. Exports:
+//    - `DebugUploadDropzone`: A debug-enabled dropzone component.
+//    - `UploadDropzone`: A regular dropzone component for file uploads.
+//    - `UploadButton`: A button for uploading files.
 import {
   generateUploadDropzone,
   generateUploadButton,

@@ -127,7 +127,7 @@ export default async function CertificatePage({
                     <p>
                       <span className="font-medium">Final Price:</span>{" "}
                       <span className="font-semibold">
-                        {/* Changed to Saudi Riyal (SAR) */}﷼
+                        {/* Changed to Saudi Riyal (SAR) */}SAR
                         {finalPrice.toLocaleString("en-SA")}
                       </span>
                     </p>
