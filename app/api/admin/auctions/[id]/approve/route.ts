@@ -1,3 +1,10 @@
+/*
+Checks if the user is a SUPER_ADMIN (only they can approve).
+Updates the auction's isApproved field in the database to true.
+Sends back a response to the frontend:
+Success if approved
+Error if not allowed or something goes wrong
+*/
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";

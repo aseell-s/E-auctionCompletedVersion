@@ -1,3 +1,6 @@
+ // - POST API to receive file uploads.
+// - Converts and saves files to public/uploads with unique names.
+// - Returns file paths to the client.
 import { NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';

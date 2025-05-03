@@ -1,3 +1,17 @@
+// 1. Provides a registration form for sellers to create an account.
+// 2. Collects seller details, including:
+//    - Company details: Name, registration number, address, city, state, postal code, establishment year, nature of business, PAN/TAN number, and tax ID.
+//    - Contact details: Email, phone number, contact name, and contact phone number.
+//    - Additional details: Country and date of birth.
+// 3. Validates form inputs using a `zod` schema to ensure all required fields are filled and valid.
+// 4. Handles form input changes and updates the state dynamically.
+// 5. Sends a POST request to the `/api/auth/seller-register` endpoint to register the seller.
+// 6. Displays success messages upon successful registration and redirects the user to the `/login` page.
+// 7. Handles errors during registration and displays error messages to the user.
+// 8. Includes a "Cancel" button to reset the form fields to their default values.
+// 9. Uses `useAuthStore` to update the global state with the registered seller's information.
+// 10. Uses Tailwind CSS for responsive and visually appealing styling.
+// 11. Displays a loading state while the registration request is being processed.
 "use client";
 
 import { useState } from "react";

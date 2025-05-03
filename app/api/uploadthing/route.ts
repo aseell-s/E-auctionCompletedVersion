@@ -1,3 +1,6 @@
+// - Defines GET and POST routes for file uploads using UploadThing.
+// - Uses ourFileRouter to manage upload logic and permissions.
+// - Includes HEAD endpoint to check if the API is working.
 import { createRouteHandler } from "uploadthing/next";
 import { ourFileRouter } from "@/lib/uploadthing";
 

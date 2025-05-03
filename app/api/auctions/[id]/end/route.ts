@@ -1,3 +1,9 @@
+/*
+ - Get info about one auction, including bids and seller.
+ - Only logged-in users can see this data.
+ - Used to show auction details and bid history.
+ Lets the frontend load auction data using the auction ID
+*/
 import { NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";

@@ -1,3 +1,10 @@
+/*
+Checks if the user is logged in before allowing access.
+Makes sure the user is a SUPER_ADMIN to view the auction info.
+Gets auction data from the database.
+Handles errors properly, like if someone isn’t logged in or doesn’t have permission.
+Provides auction info for admin dashboards or tools
+*/
 import { NextResponse } from "next/server";
 import { PrismaClient, Role, AuctionStatus } from "@prisma/client";
 import { getServerSession } from "next-auth";

@@ -1,3 +1,11 @@
+// 1. Protects routes by ensuring only authenticated users can access them.
+// 2. Optionally restricts access to users with specific roles using the `allowedRoles` prop.
+// 3. Redirects users:
+//    - To `/login` if they are not authenticated.
+//    - To `/unauthorized` if their role is not allowed.
+// 4. Displays a loading spinner while the authentication status is being determined.
+// 5. Renders the protected content (`children`) if the user is authenticated and authorized.
+// 6. Can be used for both general protected pages and role-specific pages.
 "use client";
 
 import { useSession } from "next-auth/react";

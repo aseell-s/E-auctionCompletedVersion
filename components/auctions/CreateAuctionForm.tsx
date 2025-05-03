@@ -1,3 +1,21 @@
+// 1. Provides a form for users to create a new auction.
+// 2. Collects auction details, including:
+//    - Title, description, starting price, end time, material type, and images.
+// 3. Validates inputs using zod schema:
+//    - Ensures required fields are filled and valid (e.g., future end time, at least one image).
+// 4. Handles image uploads:
+//    - Allows users to upload up to 5 images.
+//    - Displays uploaded images with an option to remove them.
+// 5. Submits auction data to the server:
+//    - Sends a POST request with auction details and image URLs.
+//    - Displays success or error notifications using toast.
+// 6. Uses React state to manage:
+//    - Loading state during submission.
+//    - Uploaded images and their URLs.
+// 7. Provides a user-friendly interface with:
+//    - Input fields, dropdowns, date pickers, and file uploaders.
+//    - Styled with Tailwind CSS for responsiveness and usability.
+
 "use client";
 
 import { useEffect, useState } from "react";

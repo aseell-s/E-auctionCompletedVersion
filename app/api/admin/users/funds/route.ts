@@ -1,3 +1,9 @@
+/*
+Lets admins add money to a user’s account for things like bidding.
+Makes sure only SUPER_ADMIN users can do this.
+Checks that the user ID and amount are valid before updating.
+Supports admin tools used to manage user accounts.
+*/
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 // Fix: Import authOptions directly from the route file

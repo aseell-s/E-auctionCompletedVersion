@@ -1,3 +1,7 @@
+// - GET API to fetch profile info for logged-in users (name, email, role, etc.).
+// - Secures access so only authenticated users can use it.
+// - Excludes sensitive data like passwords.
+// - Supports dashboards and dynamic profile display on the frontend.
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";

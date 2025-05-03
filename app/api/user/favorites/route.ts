@@ -1,3 +1,6 @@
+// - GET API to fetch all favorite auctions for the logged-in user.
+// - Retrieves data from the database with auction details.
+// - Only accessible by authenticated users.
 import { NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";

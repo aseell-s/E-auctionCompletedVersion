@@ -1,3 +1,7 @@
+// - POST API for handling ended auctions.
+// - Only SUPER_ADMIN users can run this.
+// - Calls a function to process ended auctions (e.g., give points, update status).
+// - Part of the backend logic in a Next.js app.
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";

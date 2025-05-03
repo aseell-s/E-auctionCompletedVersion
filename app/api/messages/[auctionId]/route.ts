@@ -1,3 +1,7 @@
+// - GET API to fetch all messages for a specific auction.
+// - Only logged-in users can access it.
+// - Checks if the auction exists.
+// - Uses Prisma to get messages in order (oldest to newest)
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
