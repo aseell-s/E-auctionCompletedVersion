@@ -54,7 +54,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Use these credentials to test the application:
 
 - **Admin**: admin@example.com / admin123
-- **Seller**: john@seller.com / seller123
+- **Seller**: aseel@seller.com / seller123
 - **Buyer**: bob@buyer.com / buyer123
 
 ## Responsive Design
