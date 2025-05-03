@@ -75,43 +75,37 @@
   }
 }
 
-/* Certificate A4 size styling */
-.certificate-container {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  background: white;
-  position: relative;
-  box-sizing: border-box;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 0 auto;
-}
-
-.certificate-content {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  justify-content: space-between;
-}
-
-/* PDF-specific styles that apply when printing */
+/* Certificate print styles */
 @media print {
-  .certificate-container {
-    width: 210mm;
-    height: 297mm;
+  @page {
+    size: A4;
     margin: 0;
-    padding: 0;
-    box-shadow: none;
-    border-radius: 0;
   }
   
-  .certificate-content {
-    padding: 15mm;
-    min-height: 297mm;
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body * {
+    visibility: hidden;
+  }
+  
+  #certificate, #certificate * {
+    visibility: visible;
+  }
+  
+  #certificate {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background-color: white !important;
   }
 }
-
-/* Keep any other global styles you have below */
