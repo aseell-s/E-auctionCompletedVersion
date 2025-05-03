@@ -87,35 +87,26 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
       }
 
-      // Only fetch user data if we have a token ID
-      if (token.id) {
-        try {
-          // Always fetch the latest amount and points from DB
-          const userData = await prisma.user.findUnique({
-            where: { id: token.id as string },
-            select: { amount: true, points: true },
-          });
-          console.log("User data for token update:", userData);
+      // Always fetch the latest amount and points from DB
+      const userData = await prisma.user.findUnique({
+        where: { id: token.id as string },
+        select: { amount: true, points: true },
+      });
+      console.log("User data for token update:", userData);
 
-          if (userData) {
-            token.amount = userData.amount;
-            token.points = userData.points;
-          } else {
-            // Set default values if userData is null
-            token.amount = token.amount || 0;
-            token.points = token.points || 0;
-          }
-        } catch (error) {
-          console.error("Error fetching user data for token:", error);
-          // Use default values if there's an error
-          token.amount = token.amount || 0;
-          token.points = token.points || 0;
-        }
+      if (userData) {
+        token.amount = userData.amount;
+        token.points = userData.points;
       }
-      
       return token;
     },
     async session({ session, token }) {
+      // Check if token has been invalidated
+      if (token.error === "TokenUserNotFound") {
+        // Return minimal session that will trigger a logout
+        return { expires: "0" };
+      }
+
       return {
         ...session,
         user: {
