@@ -31,12 +31,6 @@ export const authOptions: NextAuthOptions = {
         const normalizedEmail = credentials.email.trim().toLowerCase();
         console.log("Normalized email:", normalizedEmail);
 
-        // Log the plain-text password for debugging
-        console.log(
-          "User provided password (plain-text):",
-          credentials.password
-        );
-
         // Find user in the database by normalized email
         const user = await prisma.user.findUnique({
           where: { email: normalizedEmail },
@@ -97,30 +91,17 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
       }
 
-      // Only fetch user data if we have a valid token ID
-      if (token.id) {
-        try {
-          // First check if the user still exists
-          const userExists = await prisma.user.findUnique({
-            where: { id: token.id as string },
-            select: { id: true, amount: true, points: true },
-          });
+      // Always fetch the latest amount and points from DB
+      const userData = await prisma.user.findUnique({
+        where: { id: token.id as string },
+        select: { amount: true, points: true },
+      });
+      console.log("User data for token update:", userData);
 
-          if (userExists) {
-            // User exists, update token with latest data
-            token.amount = userExists.amount;
-            token.points = userExists.points;
-          } else {
-            // User no longer exists in the database, invalidate the token
-            console.log("User not found in database, invalidating token");
-            return { error: "TokenUserNotFound" };
-          }
-        } catch (error) {
-          console.error("Error fetching user data for token:", error);
-          // Don't throw error, just continue with existing token
-        }
+      if (userData) {
+        token.amount = userData.amount;
+        token.points = userData.points;
       }
-
       return token;
     },
     async session({ session, token }) {

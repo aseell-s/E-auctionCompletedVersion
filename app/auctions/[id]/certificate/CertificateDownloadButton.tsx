@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { Download } from "lucide-react";
+import { Download, Loader2, Printer } from "lucide-react";
 
 interface CertificateDownloadButtonProps {
   auctionId: string;
@@ -16,74 +16,69 @@ export default function CertificateDownloadButton({
 }: CertificateDownloadButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [isClient, setIsClient] = useState(false);
 
-  const handleDownload = async () => {
+  // Ensure we're on the client side before rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handlePrint = async () => {
     try {
       setIsLoading(true);
 
-      // Dynamically import html2pdf to reduce bundle size
-      const html2pdf = (await import("html2pdf.js")).default;
-
+      // Get the certificate element
       const certificateElement = document.getElementById("certificate");
-
       if (!certificateElement) {
         throw new Error("Certificate element not found");
       }
 
-      const filename = `${auctionTitle.slice(
-        0,
-        20
-      )}-certificate-${auctionId.slice(0, 8)}.pdf`;
+      // Create a filename for the PDF
+      const filename = `${auctionTitle.slice(0, 20)}-certificate-${auctionId.slice(0, 8)}`;
 
-      // Clean up any stray elements before generating PDF
-      const clonedElement = certificateElement.cloneNode(true) as HTMLElement;
+      // Set the document title to be used as the PDF filename
+      const originalTitle = document.title;
+      document.title = filename;
+      
+      // Create a style element to hide everything except the certificate
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          #certificate, #certificate * {
+            visibility: visible;
+          }
+          #certificate {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Print the page (which will only show the certificate)
+      window.print();
+      
+      // Clean up
+      document.head.removeChild(style);
+      document.title = originalTitle;
 
-      const opt = {
-        margin: 0,
-        filename: filename,
-        image: { type: "jpeg", quality: 0.95 },
-        html2canvas: {
-          scale: 1.5, // Reduced scale for better fitting
-          useCORS: true,
-          letterRendering: true,
-          scrollY: 0,
-          scrollX: 0,
-          windowWidth: 210 * 3.78, // A4 width in pixels at 96 DPI
-        },
-        jsPDF: {
-          unit: "mm",
-          format: "a4",
-          orientation: "portrait",
-          precision: 16,
-          compress: true,
-          hotfixes: ["px_scaling"],
-        },
-        pagebreak: { avoid: ["p", "h2", "h3"] },
-      };
-
-      html2pdf()
-        .from(certificateElement)
-        .set(opt)
-        .toPdf() // Generate PDF
-        .output("datauristring")
-        .then((pdfAsString: string) => {
-          // Create download
-          const downloadLink = document.createElement("a");
-          downloadLink.href = pdfAsString;
-          downloadLink.download = filename;
-          downloadLink.click();
-
-          toast({
-            title: "Certificate downloaded!",
-            description: "Your auction certificate has been saved as PDF.",
-          });
-        });
-    } catch (error) {
-      console.error("Failed to generate PDF:", error);
       toast({
-        title: "Download failed",
-        description:
-          "There was a problem generating the certificate. Please try again.",
+        title: "Certificate ready!",
+        description: "Your certificate has been prepared for printing/saving.",
+      });
+    } catch (error) {
+      console.error("Failed to generate certificate:", error);
+      toast({
+        title: "Print failed",
+        description: "There was a problem preparing the certificate. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -91,43 +86,50 @@ export default function CertificateDownloadButton({
     }
   };
 
+  if (!isClient) {
+    return null; // Don't render anything during SSR
+  }
+
   return (
-    <Button
-      className="mt-4"
-      onClick={handleDownload}
-      disabled={isLoading}
-      size="lg"
-    >
-      {isLoading ? (
-        <span className="flex items-center">
-          <svg
-            className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          Generating PDF...
-        </span>
-      ) : (
-        <span className="flex items-center">
-          <Download className="mr-2 h-4 w-4" />
-          Download Certificate
-        </span>
-      )}
-    </Button>
+    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+      <Button
+        className="w-full sm:w-auto"
+        onClick={handlePrint}
+        disabled={isLoading}
+        size="lg"
+      >
+        {isLoading ? (
+          <span className="flex items-center justify-center">
+            <Loader2 className="animate-spin mr-2 h-4 w-4" />
+            Preparing...
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">
+            <Printer className="mr-2 h-4 w-4" />
+            Print Certificate
+          </span>
+        )}
+      </Button>
+      
+      <Button
+        className="w-full sm:w-auto"
+        onClick={handlePrint}
+        disabled={isLoading}
+        variant="outline"
+        size="lg"
+      >
+        {isLoading ? (
+          <span className="flex items-center justify-center">
+            <Loader2 className="animate-spin mr-2 h-4 w-4" />
+            Preparing...
+          </span>
+        ) : (
+          <span className="flex items-center justify-center">
+            <Download className="mr-2 h-4 w-4" />
+            Save as PDF
+          </span>
+        )}
+      </Button>
+    </div>
   );
 }

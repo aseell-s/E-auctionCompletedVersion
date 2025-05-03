@@ -60,15 +60,15 @@ export function DashboardClient({ user }: DashboardClientProps) {
       case Role.SUPER_ADMIN:
         return (
           <div className="w-full">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-semibold text-indigo-800">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-3xl font-semibold text-indigo-800">
                 Admin Overview
               </h2>
               <Button
                 variant="outline"
                 onClick={handleProcessAuctions}
                 disabled={processingAuctions}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-sm sm:text-base w-full sm:w-auto"
               >
                 <RefreshCw
                   size={16}
@@ -80,24 +80,24 @@ export function DashboardClient({ user }: DashboardClientProps) {
               </Button>
             </div>
             <div
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 p-5 
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 p-3 sm:p-5 
                 bg-white/10 backdrop-blur-lg shadow-lg rounded-xl border border-white/20"
             >
-              <div className="p-6 bg-blue-100/60 rounded-lg text-center shadow-md border border-blue-300">
+              <div className="p-4 sm:p-6 bg-blue-100/60 rounded-lg text-center shadow-md border border-blue-300">
                 <h3 className="font-medium text-gray-800">Pending Sellers</h3>
-                <p className="text-3xl font-bold text-blue-700">
+                <p className="text-2xl sm:text-3xl font-bold text-blue-700">
                   {loading ? "..." : data.pendingSellers.length}
                 </p>
               </div>
-              <div className="p-6 bg-green-100/60 rounded-lg text-center shadow-md border border-green-300">
+              <div className="p-4 sm:p-6 bg-green-100/60 rounded-lg text-center shadow-md border border-green-300">
                 <h3 className="font-medium text-gray-800">Pending Auctions</h3>
-                <p className="text-3xl font-bold text-green-700">
+                <p className="text-2xl sm:text-3xl font-bold text-green-700">
                   {loading ? "..." : data.pendingAuctions.length}
                 </p>
               </div>
-              <div className="p-6 bg-purple-100/60 rounded-lg text-center shadow-md border border-purple-300">
+              <div className="p-4 sm:p-6 bg-purple-100/60 rounded-lg text-center shadow-md border border-purple-300">
                 <h3 className="font-medium text-gray-800">Total Users</h3>
-                <p className="text-3xl font-bold text-purple-700">
+                <p className="text-2xl sm:text-3xl font-bold text-purple-700">
                   {loading ? "..." : data.totalUsers}
                 </p>
               </div>
@@ -123,7 +123,7 @@ export function DashboardClient({ user }: DashboardClientProps) {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-100 px-8 py-6 flex flex-col">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-100 flex flex-col">
         <main className="">{renderRoleSpecificContent()}</main>
       </div>
     </>

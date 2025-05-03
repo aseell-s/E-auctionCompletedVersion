@@ -13,9 +13,12 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
-import { Search, FilterX, Heart } from "lucide-react";
+import { Search, FilterX, Heart, Filter, ChevronDown, Loader2 } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 interface Auction {
   id: string;
@@ -32,8 +35,8 @@ interface Auction {
   _count: {
     bids: number;
   };
-  itemType?: string; // Changed from category to itemType
-  isFavorite?: boolean; // Whether the current user has favorited this auction
+  itemType?: string;
+  isFavorite?: boolean;
 }
 
 export function BuyerDashboard() {
@@ -41,16 +44,38 @@ export function BuyerDashboard() {
   const [filteredAuctions, setFilteredAuctions] = useState<Auction[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  // New filter states
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
   const [categories, setCategories] = useState<string[]>([]);
   const [maxPrice, setMaxPrice] = useState<number>(100000);
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : 0
+  );
+
+  // Track window size for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      if (window.innerWidth >= 768) {
+        setShowFilters(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         const response = await fetch("/api/auctions/approved");
         if (!response.ok) throw new Error("Failed to fetch auctions");
         const data = await response.json();
@@ -71,7 +96,6 @@ export function BuyerDashboard() {
         }));
 
         setAuctions(auctionsWithFavorites);
-        console.log("auctions: ", auctionsWithFavorites);
         setFilteredAuctions(auctionsWithFavorites);
 
         // Extract unique categories
@@ -89,8 +113,9 @@ export function BuyerDashboard() {
         );
         setMaxPrice(highestPrice);
         setPriceRange([0, highestPrice]);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching auctions:", error);
+        setError(error.message || "Failed to load auctions");
       } finally {
         setLoading(false);
       }
@@ -98,10 +123,6 @@ export function BuyerDashboard() {
 
     fetchAuctions();
   }, []);
-
-  useEffect(() => {
-    console.log("selectedCategory: ", selectedCategory);
-  }, [selectedCategory]);
 
   useEffect(() => {
     // Apply all filters (search query, category, price range, favorites)
@@ -129,6 +150,7 @@ export function BuyerDashboard() {
     setSelectedCategory(null);
     setPriceRange([0, maxPrice]);
     setShowFavoritesOnly(false);
+    setIsFilterSheetOpen(false);
   };
 
   const toggleFavorite = async (auctionId: string) => {
@@ -184,135 +206,305 @@ export function BuyerDashboard() {
     }
   };
 
+  // Group auctions by status
+  const activeAuctions = filteredAuctions.filter(auction => auction.status === "ACTIVE");
+  const endedAuctions = filteredAuctions.filter(auction => auction.status === "ENDED");
+  const favoriteAuctions = filteredAuctions.filter(auction => auction.isFavorite);
+
   if (loading) {
     return (
-      <div className="text-center p-6">
-        <p>Loading auctions...</p>
+      <div className="flex items-center justify-center p-6 min-h-[300px]">
+        <div className="flex flex-col items-center">
+          <Loader2 className="h-12 w-12 animate-spin text-indigo-500 mb-2" />
+          <p className="text-gray-500">Loading auctions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center p-6 bg-red-50 border border-red-200 text-red-600 rounded-lg">
+        <p>{error}</p>
+        <Button 
+          variant="outline" 
+          className="mt-4"
+          onClick={() => window.location.reload()}
+        >
+          Try Again
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-        <h2 className="text-2xl font-bold">Available Auctions</h2>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h2 className="text-xl sm:text-2xl font-bold">Available Auctions</h2>
+        
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200">
+            {auctions.length} Total Auctions
+          </Badge>
+          <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200">
+            {favoriteAuctions.length} Favorites
+          </Badge>
+        </div>
       </div>
 
-      <Card className="p-3">
-        <div className="flex flex-wrap gap-3">
-          {/* Search input */}
-          <div className="relative flex-grow min-w-[200px]">
-            <Search
-              className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={16}
-            />
-            <Input
-              type="text"
-              placeholder="Search auctions..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9"
-            />
-          </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+        <Card className="p-3 sm:p-4 bg-blue-50 border-blue-200">
+          <h3 className="text-xs sm:text-sm font-medium text-blue-700">Active Auctions</h3>
+          <p className="text-xl sm:text-2xl font-bold text-blue-800">
+            {activeAuctions.length}
+          </p>
+        </Card>
+        <Card className="p-3 sm:p-4 bg-amber-50 border-amber-200">
+          <h3 className="text-xs sm:text-sm font-medium text-amber-700">Ended Auctions</h3>
+          <p className="text-xl sm:text-2xl font-bold text-amber-800">
+            {endedAuctions.length}
+          </p>
+        </Card>
+        <Card className="p-3 sm:p-4 bg-rose-50 border-rose-200 col-span-2 sm:col-span-1">
+          <h3 className="text-xs sm:text-sm font-medium text-rose-700">My Favorites</h3>
+          <p className="text-xl sm:text-2xl font-bold text-rose-800">
+            {favoriteAuctions.length}
+          </p>
+        </Card>
+      </div>
 
-          {/* Category filter */}
-          <div className="w-full md:w-auto min-w-[180px]">
-            <Select
-              value={selectedCategory || undefined}
-              onValueChange={(value) =>
-                setSelectedCategory(value === "all" ? null : value)
-              }
-            >
-              <SelectTrigger className="h-9">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Favorites toggle */}
-          <Toggle
-            pressed={showFavoritesOnly}
-            onPressedChange={setShowFavoritesOnly}
-            className="h-9 px-3 data-[state=on]:text-rose-500 data-[state=on]:bg-rose-50 data-[state=on]:border-rose-200"
-            aria-label="Show favorites only"
+      {/* Filter Section */}
+      <Card className="p-3 sm:p-4">
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="font-medium text-sm sm:text-base">Filter Auctions</h3>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setShowFilters(!showFilters)}
+            className="md:hidden flex items-center gap-1"
           >
-            <Heart className="h-4 w-4 mr-2" />
-            Favorites
-          </Toggle>
-
-          {/* Reset button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={resetFilters}
-            className="flex items-center gap-1 h-9 px-3"
-          >
-            <FilterX size={14} />
-            Reset
+            {showFilters ? "Hide" : "Show"} Filters
+            <ChevronDown size={16} className={`transition-transform ${showFilters ? "rotate-180" : ""}`} />
           </Button>
         </div>
 
-        {/* Price range */}
-        <div className="mt-3 px-1">
-          <div className="flex justify-between text-sm text-muted-foreground mb-1.5">
-            <span>Price: ﷼{priceRange[0]}</span>
-            <span>﷼{priceRange[1]}</span>
+        {showFilters && (
+          <div className="space-y-3">
+            {/* Search input */}
+            <div className="relative w-full">
+              <Search
+                className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={16}
+              />
+              <Input
+                type="text"
+                placeholder="Search auctions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-9 w-full"
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              {/* Category filter */}
+              <div className="w-full sm:w-1/2">
+                <Select
+                  value={selectedCategory || undefined}
+                  onValueChange={(value) =>
+                    setSelectedCategory(value === "all" ? null : value)
+                  }
+                >
+                  <SelectTrigger className="h-9 w-full">
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex gap-2 w-full sm:w-1/2">
+                {/* Favorites toggle */}
+                <Toggle
+                  pressed={showFavoritesOnly}
+                  onPressedChange={setShowFavoritesOnly}
+                  className="h-9 px-3 flex-1 data-[state=on]:text-rose-500 data-[state=on]:bg-rose-50 data-[state=on]:border-rose-200"
+                  aria-label="Show favorites only"
+                >
+                  <Heart className="h-4 w-4 mr-2" />
+                  Favorites
+                </Toggle>
+
+                {/* Reset button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetFilters}
+                  className="flex items-center gap-1 h-9 px-3"
+                >
+                  <FilterX size={14} />
+                  Reset
+                </Button>
+              </div>
+            </div>
+
+            {/* Price range */}
+            <div className="px-1">
+              <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-1.5">
+                <span>Price: ﷼{priceRange[0].toLocaleString()}</span>
+                <span>﷼{priceRange[1].toLocaleString()}</span>
+              </div>
+              <Slider
+                defaultValue={[0, maxPrice]}
+                min={0}
+                max={maxPrice}
+                step={100}
+                value={priceRange}
+                onValueChange={(value: number[]) =>
+                  setPriceRange(value as [number, number])
+                }
+                className="mt-2 w-full"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>﷼0</span>
+                <span>﷼{maxPrice.toLocaleString()}</span>
+              </div>
+            </div>
           </div>
-          <Slider
-            defaultValue={[0, maxPrice]}
-            min={0}
-            max={maxPrice}
-            step={100}
-            value={priceRange}
-            onValueChange={(value: number[]) =>
-              setPriceRange(value as [number, number])
-            }
-          />
-        </div>
+        )}
       </Card>
 
-      {filteredAuctions.length === 0 ? (
-        <div className="text-center p-4 bg-muted rounded-lg mt-2">
-          <p className="text-muted-foreground">
-            No auctions match your search criteria. Try adjusting your filters.
-          </p>
-        </div>
-      ) : (
-        <div>
-          <p className="text-xs text-muted-foreground my-2">
-            Showing {filteredAuctions.length} of {auctions.length} auctions
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredAuctions.map((auction) => (
-              <div key={auction.id} className="relative">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="absolute top-2 right-2 z-10 bg-white/80 rounded-full h-8 w-8 hover:bg-white"
-                  onClick={() => toggleFavorite(auction.id)}
-                >
-                  <Heart
-                    className={`h-5 w-5 ${
-                      auction.isFavorite
-                        ? "fill-rose-500 text-rose-500"
-                        : "text-gray-600"
-                    }`}
-                  />
-                </Button>
-                <AuctionCard auction={auction} />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Results count */}
+      <p className="text-xs text-gray-500 my-2">
+        Showing {filteredAuctions.length} of {auctions.length} auctions
+      </p>
+
+      {/* Tabs for different auction views */}
+      <Tabs defaultValue="all" className="w-full">
+        <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-flex mb-4">
+          <TabsTrigger value="all" className="text-xs sm:text-sm">
+            All ({filteredAuctions.length})
+          </TabsTrigger>
+          <TabsTrigger value="active" className="text-xs sm:text-sm">
+            Active ({activeAuctions.length})
+          </TabsTrigger>
+          <TabsTrigger value="favorites" className="text-xs sm:text-sm">
+            Favorites ({favoriteAuctions.length})
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="all">
+          {filteredAuctions.length === 0 ? (
+            <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-gray-500">No auctions match your search criteria.</p>
+              <Button
+                variant="outline"
+                onClick={resetFilters}
+                className="mt-4"
+              >
+                Reset Filters
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {filteredAuctions.map((auction) => (
+                <div key={auction.id} className="relative">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="absolute top-2 right-2 z-10 bg-white/80 rounded-full h-8 w-8 hover:bg-white shadow-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      toggleFavorite(auction.id);
+                    }}
+                  >
+                    <Heart
+                      className={`h-4 w-4 ${
+                        auction.isFavorite
+                          ? "fill-rose-500 text-rose-500"
+                          : "text-gray-600"
+                      }`}
+                    />
+                  </Button>
+                  <AuctionCard auction={auction} />
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="active">
+          {activeAuctions.length === 0 ? (
+            <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-gray-500">No active auctions found.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {activeAuctions.map((auction) => (
+                <div key={auction.id} className="relative">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="absolute top-2 right-2 z-10 bg-white/80 rounded-full h-8 w-8 hover:bg-white shadow-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      toggleFavorite(auction.id);
+                    }}
+                  >
+                    <Heart
+                      className={`h-4 w-4 ${
+                        auction.isFavorite
+                          ? "fill-rose-500 text-rose-500"
+                          : "text-gray-600"
+                      }`}
+                    />
+                  </Button>
+                  <AuctionCard auction={auction} />
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="favorites">
+          {favoriteAuctions.length === 0 ? (
+            <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-gray-500">You haven't added any auctions to your favorites yet.</p>
+              <p className="text-sm text-gray-400 mt-2">Click the heart icon on any auction to add it to your favorites.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {favoriteAuctions.map((auction) => (
+                <div key={auction.id} className="relative">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="absolute top-2 right-2 z-10 bg-white/80 rounded-full h-8 w-8 hover:bg-white shadow-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      toggleFavorite(auction.id);
+                    }}
+                  >
+                    <Heart
+                      className={`h-4 w-4 fill-rose-500 text-rose-500`}
+                    />
+                  </Button>
+                  <AuctionCard auction={auction} />
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -447,6 +447,7 @@ export function CreateAuctionForm() {
                                   type="button"
                                   onClick={() => removeImage(url)}
                                   className="absolute top-1 right-1 bg-black bg-opacity-70 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  title="Remove image"
                                 >
                                   <X className="h-4 w-4 text-white" />
                                 </button>
