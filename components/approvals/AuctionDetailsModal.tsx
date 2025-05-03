@@ -7,10 +7,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/utils";
-import Image from "next/image";
-import { useEffect } from "react";
 import { Auction } from "@/types";
+import { formatDate, formatCurrency } from "@/lib/utils";
+import Image from "next/image";
+import { CheckCircle, XCircle } from "lucide-react";
 
 interface AuctionDetailsModalProps {
   isOpen: boolean;
@@ -27,155 +27,93 @@ export function AuctionDetailsModal({
   onApprove,
   onReject,
 }: AuctionDetailsModalProps) {
-  useEffect(() => {
-    if (isOpen && auction) {
-      console.log("AuctionDetailsModal - Received auction data:", {
-        id: auction.id,
-        title: auction.title,
-        description: auction.description,
-        startPrice: auction.startPrice,
-        currentPrice: auction.currentPrice,
-        status: auction.status,
-        seller: auction.seller,
-        images: auction.images,
-        bids: auction.bids,
-      });
-    }
-  }, [isOpen, auction]);
-
   const handleApprove = () => {
-    console.log("AuctionDetailsModal - Approving auction:", auction.id);
     onApprove(auction.id);
     onClose();
   };
 
   const handleReject = () => {
-    console.log("AuctionDetailsModal - Rejecting auction:", auction.id);
     onReject(auction.id);
     onClose();
   };
+
+  const InfoItem = ({ label, value }: { label: string; value: string | number | null | undefined }) => (
+    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 py-1.5 border-b border-gray-100">
+      <span className="text-xs sm:text-sm font-medium text-gray-600 sm:w-1/3">{label}:</span>
+      <span className="text-sm sm:text-base text-gray-900">{value !== null && value !== undefined ? value : "N/A"}</span>
+    </div>
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Auction Details</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">Auction Details</DialogTitle>
         </DialogHeader>
-
-        <div className="mt-4 space-y-6">
-          <div>
-            <h3 className="font-semibold text-lg">{auction.title}</h3>
-            <p className="text-gray-600 mt-1">{auction.description}</p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold">Auction Information</h3>
-              <div className="mt-2 space-y-2">
-                <p>
-                  <span className="text-gray-600">Start Price:</span> ﷼
-                  {auction.startPrice.toFixed(2)}
-                </p>
-                <p>
-                  <span className="text-gray-600">Current Price:</span> ﷼
-                  {auction.currentPrice.toFixed(2)}
-                </p>
-                <p>
-                  <span className="text-gray-600">Created:</span>{" "}
-                  {formatDate(auction.createdAt)}
-                </p>
-                <p>
-                  <span className="text-gray-600">End Time:</span>{" "}
-                  {formatDate(auction.endTime)}
-                </p>
-                <p>
-                  <span className="text-gray-600">Status:</span>{" "}
-                  {auction.status}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-semibold">Seller Information</h3>
-              <div className="mt-2 space-y-2">
-                <p>
-                  <span className="text-gray-600">Name:</span>{" "}
-                  {auction.seller.name}
-                </p>
-                <p>
-                  <span className="text-gray-600">Email:</span>{" "}
-                  {auction.seller.email}
-                </p>
-                {auction.seller.profile && (
-                  <>
-                    <p>
-                      <span className="text-gray-600">Company:</span>{" "}
-                      {auction.seller.profile.company || "N/A"}
-                    </p>
-                    <p>
-                      <span className="text-gray-600">Phone:</span>{" "}
-                      {auction.seller.profile.phone || "N/A"}
-                    </p>
-                    <p>
-                      <span className="text-gray-600">Location:</span>{" "}
-                      {auction.seller.profile.city &&
-                      auction.seller.profile.state
-                        ? `${auction.seller.profile.city}, ${auction.seller.profile.state}`
-                        : "N/A"}
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
+        
+        <div className="mt-2 sm:mt-4 space-y-4">
+          {/* Image Gallery */}
           {auction.images && auction.images.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-2">Images</h3>
-              <div className="grid grid-cols-3 gap-4">
+            <div className="bg-gray-50 p-2 rounded-lg">
+              <h3 className="font-semibold text-gray-800 text-sm sm:text-base mb-2">Images</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {auction.images.map((image, index) => (
-                  <Image
-                    key={index}
-                    src={image}
-                    alt={`Auction image ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-md"
-                    width={300}
-                    height={200}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {auction.bids && auction.bids.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-2">Bids</h3>
-              <div className="space-y-2">
-                {auction.bids.map((bid) => (
-                  <div
-                    key={bid.id}
-                    className="flex justify-between items-center p-2 bg-gray-50 rounded"
-                  >
-                    <span>
-                      {bid.bidder.name} bid ﷼{bid.amount.toFixed(2)}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {formatDate(bid.createdAt)}
-                    </span>
+                  <div key={index} className="relative aspect-square rounded-md overflow-hidden">
+                    <Image
+                      src={image}
+                      alt={`Auction image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 ))}
               </div>
             </div>
           )}
-
-          <div className="flex justify-end space-x-4 pt-4">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
+          
+          {/* Auction Details */}
+          <div className="bg-indigo-50 p-3 rounded-lg">
+            <h3 className="font-semibold text-indigo-800 text-sm sm:text-base mb-2">Auction Information</h3>
+            <div className="space-y-1">
+              <InfoItem label="Title" value={auction.title} />
+              <InfoItem label="Item Type" value={auction.itemType} />
+              <InfoItem label="Start Price" value={formatCurrency(auction.startPrice)} />
+              <InfoItem label="Current Price" value={formatCurrency(auction.currentPrice)} />
+              <InfoItem label="End Date" value={formatDate(auction.endTime)} />
+            </div>
+          </div>
+          
+          {/* Seller Information */}
+          <div className="bg-green-50 p-3 rounded-lg">
+            <h3 className="font-semibold text-green-800 text-sm sm:text-base mb-2">Seller Information</h3>
+            <div className="space-y-1">
+              <InfoItem label="Seller Name" value={auction.seller?.name} />
+              <InfoItem label="Seller Email" value={auction.seller?.email} />
+            </div>
+          </div>
+          
+          {/* Description */}
+          <div className="bg-amber-50 p-3 rounded-lg">
+            <h3 className="font-semibold text-amber-800 text-sm sm:text-base mb-2">Description</h3>
+            <p className="text-sm sm:text-base whitespace-pre-wrap">{auction.description}</p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-2 pt-4">
+            <Button
+              onClick={handleApprove}
+              className="bg-green-500 hover:bg-green-600 flex items-center gap-2"
+            >
+              <CheckCircle size={16} />
+              Approve Auction
             </Button>
-            <Button variant="destructive" onClick={handleReject}>
-              Reject
+            <Button 
+              onClick={handleReject} 
+              variant="destructive"
+              className="flex items-center gap-2"
+            >
+              <XCircle size={16} />
+              Reject Auction
             </Button>
-            <Button onClick={handleApprove}>Approve</Button>
           </div>
         </div>
       </DialogContent>

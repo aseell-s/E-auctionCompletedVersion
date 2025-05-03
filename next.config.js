@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     domains: [
       "1s4v5jf13d.ufs.sh",
+      "9gp5skgzim.ufs.sh" ,
 
       // Allow UploadThing domains
       "uploadthing.com",

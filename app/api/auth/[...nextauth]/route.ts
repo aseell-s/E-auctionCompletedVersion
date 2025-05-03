@@ -27,12 +27,6 @@ export const authOptions: NextAuthOptions = {
         const normalizedEmail = credentials.email.trim().toLowerCase();
         console.log("Normalized email:", normalizedEmail);
 
-        // Log the plain-text password for debugging
-        console.log(
-          "User provided password (plain-text):",
-          credentials.password
-        );
-
         // Find user in the database by normalized email
         const user = await prisma.user.findUnique({
           where: { email: normalizedEmail },
@@ -93,17 +87,32 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
       }
 
-      // Always fetch the latest amount and points from DB
-      const userData = await prisma.user.findUnique({
-        where: { id: token.id as string },
-        select: { amount: true, points: true },
-      });
-      console.log("User data for token update:", userData);
+      // Only fetch user data if we have a token ID
+      if (token.id) {
+        try {
+          // Always fetch the latest amount and points from DB
+          const userData = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { amount: true, points: true },
+          });
+          console.log("User data for token update:", userData);
 
-      if (userData) {
-        token.amount = userData.amount;
-        token.points = userData.points;
+          if (userData) {
+            token.amount = userData.amount;
+            token.points = userData.points;
+          } else {
+            // Set default values if userData is null
+            token.amount = token.amount || 0;
+            token.points = token.points || 0;
+          }
+        } catch (error) {
+          console.error("Error fetching user data for token:", error);
+          // Use default values if there's an error
+          token.amount = token.amount || 0;
+          token.points = token.points || 0;
+        }
       }
+      
       return token;
     },
     async session({ session, token }) {

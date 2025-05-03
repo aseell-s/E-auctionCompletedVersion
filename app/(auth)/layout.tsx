@@ -16,10 +16,7 @@ export default function AuthLayout({
     if (status === 'authenticated') {
       router.push('/dashboard');
     } 
-    console.log('status: ', status);
-    console.log('router: ', router);
   }, [status, router]);
-
 
   if (status === 'loading') {
     return (
@@ -28,8 +25,9 @@ export default function AuthLayout({
       </div>
     );
   }
+  
   return (
-    <div className='min-h-screen flex items-center justify-center'>
+    <div className='min-h-screen flex items-center justify-center p-2 sm:p-4'>
       <div className='w-full space-y-8'>{children}</div>
     </div>
   );

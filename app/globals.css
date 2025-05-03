@@ -77,20 +77,22 @@
 
 /* Certificate A4 size styling */
 .certificate-container {
-  width: 210mm;
-  height: 297mm; /* Changed from min-height to fixed height */
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
   background: white;
   position: relative;
   box-sizing: border-box;
-  overflow: hidden; /* Prevent content overflow */
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 0 auto;
 }
 
 .certificate-content {
-  padding: 15mm 15mm; /* Reduced vertical padding */
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 297mm; /* Changed from min-height to fixed height */
   box-sizing: border-box;
   justify-content: space-between;
 }
@@ -102,6 +104,13 @@
     height: 297mm;
     margin: 0;
     padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  
+  .certificate-content {
+    padding: 15mm;
+    min-height: 297mm;
   }
 }
 

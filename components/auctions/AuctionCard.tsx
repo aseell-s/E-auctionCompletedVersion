@@ -2,7 +2,7 @@
 
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import {
@@ -46,10 +46,22 @@ interface AuctionCardProps {
 
 export function AuctionCard({ auction }: AuctionCardProps) {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : 0
+  );
   const { data: session } = useSession();
   const router = useRouter();
   const { user } = useAuthStore();
   const userRole = user?.role;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleViewDetails = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -74,10 +86,10 @@ export function AuctionCard({ auction }: AuctionCardProps) {
 
   return (
     <Card
-      className="overflow-hidden cursor-pointer"
+      className="overflow-hidden cursor-pointer h-full flex flex-col"
       onClick={handleViewDetails}
     >
-      <div className="relative h-48 w-full">
+      <div className="relative h-36 sm:h-48 w-full">
         <Image
           src={auction.images[0] || "/placeholder-auction.jpeg"}
           alt={auction.title}
@@ -85,14 +97,14 @@ export function AuctionCard({ auction }: AuctionCardProps) {
           className="object-cover"
         />
       </div>
-      <CardHeader>
-        <CardTitle>{auction.title}</CardTitle>
-        <CardDescription className="line-clamp-2">
+      <CardHeader className="p-3 sm:p-4 md:p-6">
+        <CardTitle className="text-base sm:text-lg md:text-xl line-clamp-1">{auction.title}</CardTitle>
+        <CardDescription className="line-clamp-2 text-xs sm:text-sm">
           {auction.description}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
+      <CardContent className="p-3 sm:p-4 md:p-6 pt-0 flex-grow">
+        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
           <p>
             <span className="font-medium">Current Price:</span> ﷼
             {auction.currentPrice}
@@ -128,10 +140,10 @@ export function AuctionCard({ auction }: AuctionCardProps) {
           </p>
         </div>
       </CardContent>
-      <CardFooter className="flex gap-2">
+      <CardFooter className="p-3 sm:p-4 md:p-6 pt-0 flex flex-col sm:flex-row gap-2">
         <Button
           variant="outline"
-          className="flex-1"
+          className="w-full text-xs sm:text-sm"
           onClick={handleViewDetails}
         >
           View Details
@@ -140,7 +152,7 @@ export function AuctionCard({ auction }: AuctionCardProps) {
         {isAuctionEnded && isUserNotSeller && isUserWinner ? (
           <Button
             variant="secondary"
-            className="flex-1"
+            className="w-full text-xs sm:text-sm"
             onClick={handleChatClick}
           >
             Chat With Seller
@@ -148,7 +160,7 @@ export function AuctionCard({ auction }: AuctionCardProps) {
         ) : isUserSeller && auction.winner ? (
           <Button
             variant="secondary"
-            className="flex-1"
+            className="w-full text-xs sm:text-sm"
             onClick={handleChatClick}
           >
             Chat With Winner
@@ -158,27 +170,45 @@ export function AuctionCard({ auction }: AuctionCardProps) {
 
       {isChatOpen && (
         <div
-          className="fixed bottom-4 right-4 z-50 shadow-xl rounded-lg"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="bg-white w-[400px] rounded-t-lg flex justify-between items-center p-2 border-b">
-            <h3 className="font-semibold">Chat - {auction.title}</h3>
-            <button
-              onClick={() => setIsChatOpen(false)}
-              className="p-1 hover:bg-gray-100 rounded-full"
-            >
-              <MdClose size={20} />
-            </button>
-          </div>
-          <div className="h-[500px] w-[400px]">
-            <Chat
-              seller={{
-                id: auction.seller.id,
-                name: auction.seller.name,
-              }}
-              auctionTitle={auction.title}
-              auctionId={auction.id}
-            />
+          <div 
+            className={`
+              bg-white rounded-lg shadow-xl flex flex-col
+              w-[95%] h-[90vh] max-w-[450px] max-h-[600px]
+              sm:max-w-[400px] sm:h-[500px]
+              md:max-w-[450px] md:h-[550px]
+            `}
+          >
+            <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-t-lg flex justify-between items-center p-3 text-white">
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-indigo-600 font-bold mr-2">
+                  {auction.seller.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="font-semibold truncate text-sm sm:text-base">{auction.seller.name}</h3>
+                  <p className="text-xs text-indigo-100 truncate max-w-[200px]">{auction.title}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsChatOpen(false)}
+                className="p-1.5 hover:bg-indigo-500 rounded-full transition-colors"
+                title="Close Chat"
+              >
+                <MdClose size={windowWidth < 640 ? 18 : 20} />
+              </button>
+            </div>
+            <div className="flex-grow overflow-hidden">
+              <Chat
+                seller={{
+                  id: auction.seller.id,
+                  name: auction.seller.name,
+                }}
+                auctionTitle={auction.title}
+                auctionId={auction.id}
+              />
+            </div>
           </div>
         </div>
       )}

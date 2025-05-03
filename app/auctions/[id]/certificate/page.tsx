@@ -66,59 +66,65 @@ export default async function CertificatePage({
     auction.bids.length > 0 ? auction.bids[0].amount : auction.startPrice;
 
   return (
-    <div className="container mx-auto py-8 px-4 flex flex-col items-center">
-      <div className="max-w-3xl w-full">
-        {/* Certificate Container - This will be captured for PDF */}
+    <div className="container mx-auto py-4 sm:py-6 px-2 sm:px-4">
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="mb-4 sm:mb-6 px-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Auction Certificate</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            This certificate confirms the completion of auction: {auction.title}
+          </p>
+        </div>
+        
+        {/* Certificate Container */}
         <div id="certificate" className="certificate-container">
           {/* Decorative border */}
-          <div className="absolute inset-0 border-[12px] border-double border-gray-200 pointer-events-none"></div>
+          <div className="absolute inset-0 border-[8px] sm:border-[12px] border-double border-gray-200 pointer-events-none"></div>
 
           <div className="certificate-content">
             {/* Header with decorative elements */}
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-4">
               <div className="h-0.5 bg-gradient-to-r from-transparent via-gray-400 to-transparent w-1/3"></div>
             </div>
 
-            <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
+            <div className="text-center mb-4 sm:mb-6">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2">
                 Certificate of Auction
               </h1>
-              <p className="text-gray-600 font-semibold">E-Auction Platform</p>
-              <div className="mt-4 flex justify-center">
+              <p className="text-sm sm:text-base text-gray-600 font-semibold">E-Auction Platform</p>
+              <div className="mt-2 sm:mt-3 flex justify-center">
                 <div className="h-0.5 bg-gradient-to-r from-transparent via-gray-400 to-transparent w-1/4"></div>
               </div>
             </div>
 
             {/* Logo Section */}
-            <div className="absolute top-10 right-6 opacity-100 w-40 h-40 flex items-center justify-center">
-              {/* Replacing Seal with Custom Logo */}
+            <div className="absolute top-4 right-4 w-16 sm:w-20 md:w-24">
               <Image
-                src="/e-aucitonLogo.png" // Path to the logo image in the public folder
+                src="/e-aucitonLogo.png"
                 alt="E-Auction Logo"
-                width={160} // Reduced width
-                height={160} // Reduced height
-                objectFit="contain" // Ensures the logo fits within the bounds
+                width={100}
+                height={100}
+                style={{ objectFit: "contain" }}
               />
             </div>
 
-            {/* Main content with improved typography */}
-            <div className="mb-8 text-center">
-              <p className="text-lg">
+            {/* Main content */}
+            <div className="mb-4 sm:mb-6 text-center">
+              <p className="text-sm sm:text-base">
                 This certifies that the following auction was successfully
                 completed:
               </p>
             </div>
 
-            <div className="border-t border-b border-gray-200 py-8 my-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="border-t border-b border-gray-200 py-4 sm:py-6 my-4">
+              <div className="grid grid-cols-1 gap-4 sm:gap-6">
                 <div>
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">
+                  <h2 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-700">
                     Auction Details
                   </h2>
-                  <div className="space-y-3 text-gray-700">
+                  <div className="space-y-2 text-gray-700 text-sm">
                     <p>
                       <span className="font-medium">Auction ID:</span>{" "}
-                      <span className="font-mono">{auction.id}</span>
+                      <span className="font-mono text-xs break-all">{auction.id.slice(0, 12)}...</span>
                     </p>
                     <p>
                       <span className="font-medium">Title:</span>{" "}
@@ -127,8 +133,7 @@ export default async function CertificatePage({
                     <p>
                       <span className="font-medium">Final Price:</span>{" "}
                       <span className="font-semibold">
-                        {/* Changed to Saudi Riyal (SAR) */}﷼
-                        {finalPrice.toLocaleString("en-SA")}
+                        ﷼{finalPrice.toLocaleString("en-SA")}
                       </span>
                     </p>
                     <p>
@@ -137,11 +142,12 @@ export default async function CertificatePage({
                     </p>
                   </div>
                 </div>
+                
                 <div>
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">
+                  <h2 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-700">
                     Participants
                   </h2>
-                  <div className="space-y-3 text-gray-700">
+                  <div className="space-y-2 text-gray-700 text-sm">
                     <p>
                       <span className="font-medium">Seller:</span>{" "}
                       {auction.seller.name}
@@ -162,50 +168,53 @@ export default async function CertificatePage({
             </div>
 
             {/* Decorative Element */}
-            <div className="my-8 flex justify-center">
+            <div className="my-4 sm:my-6 flex justify-center">
               <div className="h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent w-2/3"></div>
             </div>
 
             {/* Footer */}
-            <div className="text-center mt-auto">
-              <p className="text-gray-600 mb-6">
+            <div className="text-center">
+              <p className="text-gray-600 mb-4 text-xs sm:text-sm">
                 This certificate verifies that the auction was conducted and
                 completed according to the terms and conditions of the E-Auction
                 platform.
               </p>
 
               {/* Signatures */}
-              <div className="flex justify-between items-center mt-8">
+              <div className="flex justify-between items-center mt-4 sm:mt-6">
                 <div className="text-center">
-                  <div className="border-b border-gray-400 w-40 mx-auto"></div>
-                  <p className="mt-2 text-gray-700">Platform Administrator</p>
+                  <div className="border-b border-gray-400 w-24 sm:w-32 mx-auto"></div>
+                  <p className="mt-1 text-gray-700 text-xs">Platform Administrator</p>
                 </div>
                 <div className="text-center">
-                  <div className="border-b border-gray-400 w-40 mx-auto"></div>
-                  <p className="mt-2 text-gray-700">Digital Seal</p>
+                  <div className="border-b border-gray-400 w-24 sm:w-32 mx-auto"></div>
+                  <p className="mt-1 text-gray-700 text-xs">Digital Seal</p>
                 </div>
               </div>
 
               {/* Certificate ID and Date */}
-              <div className="mt-10 flex justify-between text-xs text-gray-500">
-                <div>Certificate ID: {auction.id}-CERT</div>
+              <div className="mt-6 sm:mt-8 flex justify-between text-[10px] text-gray-500">
+                <div>Certificate ID: {auction.id.slice(0, 8)}-CERT</div>
                 <div>Issued on: {formatDate(new Date())}</div>
               </div>
             </div>
 
             {/* Watermark */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 text-[8rem] opacity-[0.03] pointer-events-none z-0 whitespace-nowrap font-bold text-gray-800">
-              E-Auction Certificate
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 text-[3rem] sm:text-[5rem] opacity-[0.03] pointer-events-none z-0 whitespace-nowrap font-bold text-gray-800">
+              E-Auction
             </div>
           </div>
         </div>
 
-        {/* Download button outside the certificate (won't be included in PDF) */}
-        <div className="text-center mt-8">
+        {/* Download button outside the certificate */}
+        <div className="text-center mt-6 px-2">
           <CertificateDownloadButton
             auctionId={auction.id}
             auctionTitle={auction.title}
           />
+          <p className="text-xs text-gray-500 mt-2">
+            Download this certificate as a PDF document for your records.
+          </p>
         </div>
       </div>
     </div>
